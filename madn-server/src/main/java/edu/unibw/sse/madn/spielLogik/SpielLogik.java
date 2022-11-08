@@ -1,6 +1,7 @@
 package edu.unibw.sse.madn.spielLogik;
 
 import edu.unibw.sse.madn.serverKomm.AnClientSendenSpiel;
+import edu.unibw.sse.madn.warteraumverwaltung.WarteraumCallback;
 
 public interface SpielLogik {
     Spiel spielHolen();
@@ -8,4 +9,6 @@ public interface SpielLogik {
     SpielErstellen spielErstellenHolen();
 
     void anClientSendenSpielSetzen(AnClientSendenSpiel anClientSendenSpiel);
+
+    void warteraumCallbackSetzen(WarteraumCallback warteraumCallback);
 }

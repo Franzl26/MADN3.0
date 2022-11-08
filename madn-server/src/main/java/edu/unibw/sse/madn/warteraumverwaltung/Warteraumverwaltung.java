@@ -6,6 +6,8 @@ import edu.unibw.sse.madn.spielLogik.SpielErstellen;
 public interface Warteraumverwaltung {
     Warteraumverwaltung warteraumverwaltungHolen();
 
+    WarteraumCallback warteraumCallbackHolen();
+
     void spielErstellenSetzen(SpielErstellen spielErstellen);
 
     void anClientSendenRaumauswahlSetzen(AnClientSendenRaumauswahl anClientSendenRaumauswahl);
