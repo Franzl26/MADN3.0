@@ -1,4 +1,4 @@
 package edu.unibw.sse.madn.datenServer;
 
-public class Benutzer {
+public record Benutzer(String benutzername, byte[] passwortHash, long zuletztEingeloggt) {
 }

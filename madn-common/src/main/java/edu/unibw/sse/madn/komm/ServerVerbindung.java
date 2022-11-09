@@ -7,9 +7,27 @@ import java.rmi.RemoteException;
 import java.security.PublicKey;
 
 public interface ServerVerbindung extends Remote {
+    /**
+     * Benutzer anmelden
+     *
+     * @param client       Rückkanal zum Client
+     * @param benutzername Benutzername
+     * @param passwort     Passwort verschlüsselt
+     * @return null: Fehler, sonst Sitzung
+     */
     Sitzung anmelden(ClientCallback client, String benutzername, byte[] passwort) throws RemoteException;
 
+    /**
+     * Benutzer registrieren
+     *
+     * @param benutzername Benutzername
+     * @param passwort     Passwort verschlüsselt
+     * @return Fehler oder Erfolg
+     */
     RegistrierenRueckgabe registrieren(String benutzername, byte[] passwort) throws RemoteException;
 
+    /**
+     * @return öffentlichen Schlüssel zur RSA-Verschlüsselung
+     */
     PublicKey oeffenltichenSchluesselHolen() throws RemoteException;
 }
