@@ -1,6 +1,7 @@
 package edu.unibw.sse.madn.warteraumverwaltung;
 
 import edu.unibw.sse.madn.komm.Sitzung;
+import edu.unibw.sse.madn.serverKomm.AnClientSendenRaumauswahl;
 
 public interface Raumauswahl {
     void fuerUpdatesAnmelden(Sitzung sitzung);
@@ -18,4 +19,6 @@ public interface Raumauswahl {
     boolean spielStarten(Sitzung sitzung);
 
     void designAnpassen(Sitzung sitzung, String design);
+
+    void anClientSendenRaumauswahlSetzen(AnClientSendenRaumauswahl anClientSendenRaumauswahl);
 }

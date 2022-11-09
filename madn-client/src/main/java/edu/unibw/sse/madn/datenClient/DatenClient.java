@@ -9,7 +9,7 @@ public interface DatenClient {
 
     SpielfeldKonfiguration konfigurationLaden(String name);
 
-    void KonfigurationSpeichern(SpielfeldKonfigurationBytes konfiguration, String name);
+    void konfigurationSpeichern(SpielfeldKonfigurationBytes konfiguration, String name);
 
     Media zufaelligesGif();
 }

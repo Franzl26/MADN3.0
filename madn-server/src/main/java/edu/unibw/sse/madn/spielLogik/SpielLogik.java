@@ -7,8 +7,4 @@ public interface SpielLogik {
     Spiel spielHolen();
 
     SpielErstellen spielErstellenHolen();
-
-    void anClientSendenSpielSetzen(AnClientSendenSpiel anClientSendenSpiel);
-
-    void warteraumCallbackSetzen(WarteraumCallback warteraumCallback);
 }

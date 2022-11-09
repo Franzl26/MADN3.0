@@ -9,10 +9,6 @@ import edu.unibw.sse.madn.warteraumverwaltung.Raumauswahl;
 public interface ServerKommunikation {
     ServerVerbindung serverVerbindungHolen();
 
-    AnClientSendenRaumauswahl anClientSendenRaumauswahlHolen();
-
-    AnClientSendenSpiel anClientSendenSpielHolen();
-
     void spielDesignSetzen(SpielDesign spielDesign);
 
     void benutzerZugangSetzen(BenutzerZugang benutzerZugang);
