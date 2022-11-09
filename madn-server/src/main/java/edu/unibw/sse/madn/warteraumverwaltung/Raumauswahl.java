@@ -1,7 +1,6 @@
 package edu.unibw.sse.madn.warteraumverwaltung;
 
 import edu.unibw.sse.madn.komm.Sitzung;
-import edu.unibw.sse.madn.serverKomm.AnClientSendenRaumauswahl;
 
 public interface Raumauswahl {
     void fuerUpdatesAnmelden(Sitzung sitzung);

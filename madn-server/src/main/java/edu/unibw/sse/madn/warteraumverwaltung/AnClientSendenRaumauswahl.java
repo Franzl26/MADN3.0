@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.serverKomm;
+package edu.unibw.sse.madn.warteraumverwaltung;
 
 import edu.unibw.sse.madn.base.Warteraeume;
 import edu.unibw.sse.madn.komm.Sitzung;

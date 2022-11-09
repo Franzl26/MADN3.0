@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.komm;
+package edu.unibw.sse.madn.base;
 
 /**
  * Rückgabewerte bei Registrierung an allen Stellen (Client/Server)

@@ -1,5 +1,7 @@
 package edu.unibw.sse.madn.komm;
 
+import edu.unibw.sse.madn.base.RegistrierenRueckgabe;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.security.PublicKey;

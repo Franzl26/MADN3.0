@@ -1,13 +1,10 @@
 package edu.unibw.sse.madn.clientKomm;
 
-import edu.unibw.sse.madn.ansicht.RaumauswahlUpdaten;
-import edu.unibw.sse.madn.ansicht.SpielUpdaten;
-import edu.unibw.sse.madn.ansicht.WarteraumUpdaten;
 import edu.unibw.sse.madn.base.SpielStatistik;
 import edu.unibw.sse.madn.base.SpielfeldKonfigurationBytes;
-import edu.unibw.sse.madn.komm.RegistrierenRueckgabe;
-import edu.unibw.sse.madn.komm.WuerfelnRueckgabe;
-import edu.unibw.sse.madn.komm.ZiehenRueckgabe;
+import edu.unibw.sse.madn.base.RegistrierenRueckgabe;
+import edu.unibw.sse.madn.base.WuerfelnRueckgabe;
+import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 
 public interface ClientKomm {
     String benutzernamenHolen();

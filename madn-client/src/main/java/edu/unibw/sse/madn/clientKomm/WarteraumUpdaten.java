@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.ansicht;
+package edu.unibw.sse.madn.clientKomm;
 
 public interface WarteraumUpdaten {
     void warteraumNamenUpdaten(String[] namen);

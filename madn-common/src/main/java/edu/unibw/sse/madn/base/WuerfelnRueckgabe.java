@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.komm;
+package edu.unibw.sse.madn.base;
 
 public enum WuerfelnRueckgabe {
     WUERFELN_VERBINDUNG_ABGEBROCHEN, WUERFELN_NICHT_DRAN, WUERFELN_FALSCHE_PHASE, WUERFELN_KEIN_ZUG_MOEGLICH, WUERFELN_ERFOLGREICH

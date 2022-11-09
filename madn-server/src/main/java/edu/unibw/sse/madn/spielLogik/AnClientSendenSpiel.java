@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.serverKomm;
+package edu.unibw.sse.madn.spielLogik;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
 import edu.unibw.sse.madn.komm.Sitzung;

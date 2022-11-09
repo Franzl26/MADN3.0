@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.komm;
+package edu.unibw.sse.madn.base;
 
 public enum ZiehenRueckgabe {
     ZIEHEN_VERBINDUNG_ABGEBROCHEN, ZIEHEN_NICHT_DRAN, ZIEHEN_NICHT_GEWUERFELT, ZIEHEN_ZUG_FEHLERHAFT, ZIEHEN_ERFOLGREICH, ZIEHEN_BESTRAFT

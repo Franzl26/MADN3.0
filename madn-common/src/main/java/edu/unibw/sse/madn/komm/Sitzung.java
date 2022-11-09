@@ -2,6 +2,8 @@ package edu.unibw.sse.madn.komm;
 
 import edu.unibw.sse.madn.base.SpielStatistik;
 import edu.unibw.sse.madn.base.SpielfeldKonfigurationBytes;
+import edu.unibw.sse.madn.base.WuerfelnRueckgabe;
+import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

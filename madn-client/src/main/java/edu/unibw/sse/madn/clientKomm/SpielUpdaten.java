@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.ansicht;
+package edu.unibw.sse.madn.clientKomm;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
 import edu.unibw.sse.madn.base.SpielStatistik;
