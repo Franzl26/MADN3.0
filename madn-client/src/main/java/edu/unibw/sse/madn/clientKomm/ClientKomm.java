@@ -1,14 +1,8 @@
 package edu.unibw.sse.madn.clientKomm;
 
-import edu.unibw.sse.madn.base.SpielStatistik;
-import edu.unibw.sse.madn.base.SpielfeldKonfigurationBytes;
-import edu.unibw.sse.madn.base.RegistrierenRueckgabe;
-import edu.unibw.sse.madn.base.WuerfelnRueckgabe;
-import edu.unibw.sse.madn.base.ZiehenRueckgabe;
+import edu.unibw.sse.madn.base.*;
 
 public interface ClientKomm {
-    String benutzernamenHolen();
-
     // Anmelden / Registrieren / Abmelden
     AllgemeinerReturnWert anmelden(String ip, String benutzername, String passwort);
 
@@ -45,9 +39,7 @@ public interface ClientKomm {
 
     SpielStatistik spielVerlassen();
 
-    void raumauswahlUpdaterSetzen(RaumauswahlUpdaten update);
-
-    void warteraumUpdaterSetzen(WarteraumUpdaten update);
+    void raumauswahlUpdaterSetzen(RaumverwaltungUpdaten update);
 
     void spielUpdaterSetzen(SpielUpdaten update);
 }

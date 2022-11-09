@@ -42,7 +42,5 @@ public interface Sitzung extends Remote {
 
     SpielStatistik spielVerlassen() throws RemoteException;
 
-    String benutzername() throws RemoteException;
-
     ClientCallback clientCallback() throws RemoteException;
 }

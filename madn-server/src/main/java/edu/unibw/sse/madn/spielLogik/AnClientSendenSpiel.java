@@ -1,23 +1,22 @@
 package edu.unibw.sse.madn.spielLogik;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
-import edu.unibw.sse.madn.komm.Sitzung;
 import edu.unibw.sse.madn.base.SpielStatistik;
 
 public interface AnClientSendenSpiel {
-    boolean spielfeldUpdaten(Sitzung sitzung, FeldBesetztStatus[] feld, int[] geandert);
+    void spielfeldUpdaten(String benutzername, FeldBesetztStatus[] feld, int[] geandert);
 
-    boolean spielNamenUpdaten(Sitzung sitzung, String[] namen);
+    void spielNamenUpdaten(String benutzername, String[] namen);
 
-    boolean aktuellenSpielerSetzen(Sitzung sitzung, int spieler);
+    void aktuellenSpielerSetzen(String benutzername, int spieler);
 
-    boolean wuerfelUpdaten(Sitzung sitzung, int wert);
+    void wuerfelUpdaten(String benutzername, int wert);
 
-    boolean wuerfelnVorbei(Sitzung sitzung);
+    void wuerfelnVorbei(String benutzername);
 
-    boolean ziehenVorbei(Sitzung sitzung);
+    void ziehenVorbei(String benutzername);
 
-    boolean gifAnzeigen(Sitzung sitzung);
+    void gifAnzeigen(String benutzername);
 
-    void spielVorbei(Sitzung sitzung, SpielStatistik statistik);
+    void spielVorbei(String benutzername, SpielStatistik statistik);
 }

@@ -1,23 +1,21 @@
 package edu.unibw.sse.madn.warteraumverwaltung;
 
-import edu.unibw.sse.madn.komm.Sitzung;
-
 public interface Raumauswahl {
-    void fuerUpdatesAnmelden(Sitzung sitzung);
+    void fuerUpdatesAnmelden(String benutzername);
 
-    boolean warteraumErstellen(Sitzung sitzung);
+    boolean warteraumErstellen(String benutzername);
 
-    boolean warteraumBeitreten(Sitzung sitzung, long raumId);
+    boolean warteraumBeitreten(String benutzername, long raumId);
 
-    void warteraumVerlassen(Sitzung sitzung);
+    void warteraumVerlassen(String benutzername);
 
-    boolean botHinzufuegen(Sitzung sitzung);
+    boolean botHinzufuegen(String benutzername);
 
-    boolean botEntfernen(Sitzung sitzung);
+    boolean botEntfernen(String benutzername);
 
-    boolean spielStarten(Sitzung sitzung);
+    boolean spielStarten(String benutzername);
 
-    void designAnpassen(Sitzung sitzung, String design);
+    void designAnpassen(String benutzername, String design);
 
     void anClientSendenRaumauswahlSetzen(AnClientSendenRaumauswahl anClientSendenRaumauswahl);
 }

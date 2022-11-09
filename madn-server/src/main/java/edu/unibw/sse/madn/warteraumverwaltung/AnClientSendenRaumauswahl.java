@@ -1,12 +1,9 @@
 package edu.unibw.sse.madn.warteraumverwaltung;
 
-import edu.unibw.sse.madn.base.Warteraeume;
-import edu.unibw.sse.madn.komm.Sitzung;
+import edu.unibw.sse.madn.base.Warteraum;
 
 public interface AnClientSendenRaumauswahl {
-    boolean raeumeUpdaten(Sitzung sitzung, Warteraeume warteraeume);
+    void raeumeUpdaten(Warteraum[] warteraeume);
 
-    boolean warteraumNamenUpdaten(Sitzung sitzung, String[] namen);
-
-    boolean spielStartet(Sitzung sitzung, String design);
+    void spielStartet(String benutzername, String design);
 }

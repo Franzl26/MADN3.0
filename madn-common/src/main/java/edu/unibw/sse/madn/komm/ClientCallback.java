@@ -2,19 +2,16 @@ package edu.unibw.sse.madn.komm;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
 import edu.unibw.sse.madn.base.SpielStatistik;
-import edu.unibw.sse.madn.base.Warteraeume;
+import edu.unibw.sse.madn.base.Warteraum;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface ClientCallback extends Remote {
     // Raumauswahl
-    void raeumeUpdaten(Warteraeume warteraeume) throws RemoteException;
-
+    void raeumeUpdaten(Warteraum[] warteraeume) throws RemoteException;
 
     // Warteraum
-    void warteraumNamenUpdaten(String[] namen) throws RemoteException;
-
     void spielStartet(String design) throws RemoteException;
 
     // im Spiel

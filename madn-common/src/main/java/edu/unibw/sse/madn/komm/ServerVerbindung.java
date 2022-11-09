@@ -9,7 +9,7 @@ import java.security.PublicKey;
 public interface ServerVerbindung extends Remote {
     Sitzung anmelden(ClientCallback client, String benutzername, byte[] passwort) throws RemoteException;
 
-    RegistrierenRueckgabe registrieren(String benutzername, byte[] pw1, byte[] pw2) throws RemoteException;
+    RegistrierenRueckgabe registrieren(String benutzername, byte[] passwort) throws RemoteException;
 
     PublicKey oeffenltichenSchluesselHolen() throws RemoteException;
 }
