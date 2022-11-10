@@ -116,7 +116,7 @@ public interface ClientKomm { // Frank
      *
      * @return Spielstatistik oder null bei Fehler
      */
-    SpielStatistik spielVerlassen();
+    Spielstatistik spielVerlassen();
 
     /**
      * Setzt für ClientCallback den Callback zur Raumauswahl/dem Warteraum

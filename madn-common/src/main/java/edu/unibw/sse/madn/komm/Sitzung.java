@@ -1,6 +1,6 @@
 package edu.unibw.sse.madn.komm;
 
-import edu.unibw.sse.madn.base.SpielStatistik;
+import edu.unibw.sse.madn.base.Spielstatistik;
 import edu.unibw.sse.madn.base.SpielfeldKonfiguration;
 import edu.unibw.sse.madn.base.WuerfelnRueckgabe;
 import edu.unibw.sse.madn.base.ZiehenRueckgabe;
@@ -101,7 +101,7 @@ public interface Sitzung extends Remote {
      *
      * @return Spielstatistik oder null bei Fehler
      */
-    SpielStatistik spielVerlassen() throws RemoteException;
+    Spielstatistik spielVerlassen() throws RemoteException;
 
     /**
      * @return Benutzernamen der Session

@@ -1,7 +1,7 @@
 package edu.unibw.sse.madn.spielLogik;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
-import edu.unibw.sse.madn.base.SpielStatistik;
+import edu.unibw.sse.madn.base.Spielstatistik;
 
 public interface AnClientSendenSpiel {
     /**
@@ -64,5 +64,5 @@ public interface AnClientSendenSpiel {
      * @param benutzername Name des Clients der informiert werden soll
      * @param statistik    Spielstatistik
      */
-    void spielVorbei(String benutzername, SpielStatistik statistik);
+    void spielVorbei(String benutzername, Spielstatistik statistik);
 }

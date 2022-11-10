@@ -1,7 +1,7 @@
 package edu.unibw.sse.madn.clientKomm;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
-import edu.unibw.sse.madn.base.SpielStatistik;
+import edu.unibw.sse.madn.base.Spielstatistik;
 
 public interface SpielUpdaten { // Frank
     /**
@@ -53,5 +53,5 @@ public interface SpielUpdaten { // Frank
      *
      * @param statistik Spielstatistik
      */
-    void spielVorbei(SpielStatistik statistik);
+    void spielVorbei(Spielstatistik statistik);
 }

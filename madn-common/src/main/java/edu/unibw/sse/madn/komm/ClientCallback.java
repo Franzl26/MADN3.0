@@ -1,7 +1,7 @@
 package edu.unibw.sse.madn.komm;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
-import edu.unibw.sse.madn.base.SpielStatistik;
+import edu.unibw.sse.madn.base.Spielstatistik;
 import edu.unibw.sse.madn.base.Warteraum;
 
 import java.rmi.Remote;
@@ -79,5 +79,5 @@ public interface ClientCallback extends Remote {
      *
      * @param statistik Spielstatistik
      */
-    void spielVorbei(SpielStatistik statistik) throws RemoteException;
+    void spielVorbei(Spielstatistik statistik) throws RemoteException;
 }
