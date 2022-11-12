@@ -1,10 +1,10 @@
-package edu.unibw.sse.madn.spielLogik;
+ package edu.unibw.sse.madn.spielLogik;
 
-public interface SpielErstellen {
+public interface SpielErstellen { // Markus
     /**
      * Erstellt ein neues Spiel
      *
-     * @param benutzernamen
+     * @param benutzernamen String-Array mit allen im Spiel vertretenen Spielernamen
      * @param bots      Anzahl Bots
      * @param spieler   Anzahl Spieler
      */
