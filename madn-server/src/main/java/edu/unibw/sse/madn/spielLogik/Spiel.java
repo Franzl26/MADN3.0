@@ -8,25 +8,25 @@ public interface Spiel { // Markus
     /**
      * Spielzug einreichen
      *
-     * @param benutzername
-     * @param von     Feld von
-     * @param nach    Feld nach
-     * @return ZiehenRueckgaeb
+     * @param benutzername Name des Spielers der gewürfelt hat
+     * @param von          Feld von
+     * @param nach         Feld nach
+     * @return ZiehenRueckgabe
      */
     ZiehenRueckgabe figurZiehen(String benutzername, int von, int nach);
 
     /**
      * Würfeln
      *
-     * @param benutzername      Name des Spielers der gewürfelt hat
-     * @return WuerfelnRueckgabe    Ergebniss des Würfelns
+     * @param benutzername Name des Spielers der gewürfelt hat
+     * @return WuerfelnRueckgabe, Ergebnis des Würfelns
      */
     WuerfelnRueckgabe wuerfeln(String benutzername);
 
     /**
      * Spiel Verlassen
      *
-     * @param benutzername
+     * @param benutzername Name des Spielers der gewürfelt hat
      * @return Spielstatistik oder Null bei Fehler
      */
     Spielstatistik spielVerlassen(String benutzername);
