@@ -2,7 +2,10 @@ package edu.unibw.sse.madn.clientKomm;
 
 import edu.unibw.sse.madn.base.*;
 
-public interface ClientKomm { // Frank
+/**
+ * Frank
+ */
+public interface ClientKomm {
     // Anmelden / Registrieren / Abmelden
 
     /**

@@ -3,7 +3,10 @@ package edu.unibw.sse.madn.clientKomm;
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
 import edu.unibw.sse.madn.base.Spielstatistik;
 
-public interface SpielUpdaten { // Frank
+/**
+ * Frank
+ */
+public interface SpielUpdaten {
     /**
      * Spielfeld aktualisieren
      *

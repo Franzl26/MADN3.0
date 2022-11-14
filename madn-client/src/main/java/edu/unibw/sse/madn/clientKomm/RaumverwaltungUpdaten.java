@@ -2,7 +2,10 @@ package edu.unibw.sse.madn.clientKomm;
 
 import edu.unibw.sse.madn.base.Warteraum;
 
-public interface RaumverwaltungUpdaten { // Frank
+/**
+ * Frank
+ */
+public interface RaumverwaltungUpdaten {
     /**
      * senden der Warteräume an den die Komponente Ansicht, damit diese angezeigt werden können
      *
