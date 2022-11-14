@@ -4,7 +4,7 @@ import edu.unibw.sse.madn.base.RegistrierenRueckgabe;
 
 public interface BenutzerZugang {
     /**
-     * Benutzer anmelden
+     * Benutzer anmelden(Domenik)
      *
      * Meldet den Benutzer an, falls benutzername und passwort übereinstimmen,
      * und gibt dabei true zurück und speichert das anmeldedatum des Nutzers
@@ -18,7 +18,7 @@ public interface BenutzerZugang {
     boolean anmelden(String benutzername, String passwort);
 
     /**
-     * Benutzer registrieren
+     * Benutzer registrieren(Domenik)
      *
      * Überprüft zunächst ob der benutzername den festgelegten guidelines entspricht (3 bis 8 zeichen[A-Za-z])
      * und ob dieser benutzername bereits vergeben ist.
@@ -35,7 +35,7 @@ public interface BenutzerZugang {
     RegistrierenRueckgabe registrieren(String benutzername, String passwort);
 
     /**
-     * Benutzer abmelden
+     * Benutzer abmelden(Domenik)
      *
      * Meldet den Benutzer ab und markiert ihn als nicht eingeloggt.
      *
