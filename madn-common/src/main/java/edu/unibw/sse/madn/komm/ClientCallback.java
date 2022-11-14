@@ -7,6 +7,9 @@ import edu.unibw.sse.madn.base.Warteraum;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * Tom
+ */
 public interface ClientCallback extends Remote {
     // Raumauswahl
 
