@@ -2,11 +2,11 @@ package edu.unibw.sse.madn.datenServer;
 
 public interface BenutzerDaten {
     /**
-     * Speichert Benutzerdaten ab
+     * Speichert einen Benutzer ab
      *
      * @param benutzer alle Benutzer
      */
-    void benutzerSpeichern(Benutzer[] benutzer);
+    void benutzerSpeichern(Benutzer benutzer);
 
     /**
      * Lädt Benutzerdaten

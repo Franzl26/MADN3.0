@@ -65,35 +65,35 @@ public interface ClientKomm { // Frank
     /**
      * Warteraum verlassen
      */
-    void warteraumVerlassen();
+    void warteraumVerlassen(long raumId);
 
     /**
      * Bot in Warteraum hinzufügen
      *
      * @return Bot hinzugefügt: RET_ERFOLGREICH, Verbindungsfehler RET_VERBINDUNG_ABGEBROCHEN, sonst RET_FEHLER
      */
-    AllgemeinerReturnWert botHinzufuegen();
+    AllgemeinerReturnWert botHinzufuegen(long raumId);
 
     /**
      * Bot aus Warteraum Entfernen
      *
      * @return Bot entfernt: RET_ERFOLGREICH, Verbindungsfehler RET_VERBINDUNG_ABGEBROCHEN, sonst RET_FEHLER
      */
-    AllgemeinerReturnWert botEntfernen();
+    AllgemeinerReturnWert botEntfernen(long raumId);
 
     /**
      * Spiel aus Warteraum starten
      *
      * @return Spiel gestartet: RET_ERFOLGREICH, Verbindungsfehler RET_VERBINDUNG_ABGEBROCHEN, sonst RET_FEHLER
      */
-    AllgemeinerReturnWert spielStarten();
+    AllgemeinerReturnWert spielStarten(long raumId);
 
     /**
      * Spieldesign im Warteraum ändern
      *
      * @param design Design
      */
-    void designAnpassen(String design);
+    void designAnpassen(String design, long raumId);
 
 
     // Spiel
