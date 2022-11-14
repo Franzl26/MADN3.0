@@ -2,6 +2,9 @@ package edu.unibw.sse.madn.datenServer;
 
 import edu.unibw.sse.madn.base.SpielfeldKonfiguration;
 
+/**
+ * Nico
+ */
 public interface SpielDesign {
     /**
      * Gibt die Liste aller Spielfeldkonfigurationen zurück

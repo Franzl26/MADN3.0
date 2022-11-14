@@ -8,6 +8,9 @@ import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * Tom
+ */
 public interface Sitzung extends Remote {
     // Nutzerverwaltung
 

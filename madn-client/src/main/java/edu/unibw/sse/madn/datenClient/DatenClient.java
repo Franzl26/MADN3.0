@@ -4,6 +4,9 @@ import edu.unibw.sse.madn.base.SpielfeldKonfiguration;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 
+/**
+ * Nico
+ */
 public interface DatenClient {
     /**
      * @return byte-Array von Bild, welches für Balken in Spielstatistik verwendet wird
