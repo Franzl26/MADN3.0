@@ -6,22 +6,25 @@ public interface ClientKomm { // Frank
     // Anmelden / Registrieren / Abmelden
 
     /**
-     * Benutzer anmelden
+     * Benutzer anmelden (AF Benutzer Anmelden)
      *
      * @param ip           Server IP
      * @param benutzername Benutzername
-     * @param passwort     Passwort verschlüsselt
-     * @return erfolgreich: true, sonst false
+     * @param passwort     Passwort im Klartext
+     * @return ERFOLGREICH: wenn angemeldet <br>
+     * FEHLER: wenn Benutzername nicht vorhanden/schon angemeldet/PW falsch<br>
+     * VERBINDUNG_ABGEBROCHEN: wenn Server nicht gefunden oder Fehler bei der Kommunikation/Verschlüsselung
      */
     AllgemeinerReturnWert anmelden(String ip, String benutzername, String passwort);
 
     /**
-     * Benutzer registrieren
+     * Benutzer registrieren (AF Registrieren)
      *
      * @param ip           Server IP
      * @param benutzername Benutzername
-     * @param passwort     Passwort RSA verschlüsselt
-     * @return entsprechend des Anwendungsfalls
+     * @param passwort     Passwort im Klartext
+     * @return entsprechend des Anwendungsfalls,
+     * "Passwörter nicht gleich" muss von der Ansicht-Komponente selber geprüft werden
      */
     RegistrierenRueckgabe registrieren(String ip, String benutzername, String passwort);
 
@@ -34,7 +37,7 @@ public interface ClientKomm { // Frank
     // Designs
 
     /**
-     * @return List aller verfügbaren Designs/Spielfeld-Konfigurationen oder null bei Fehler
+     * @return Liste der Namen aller verfügbaren Designs/Spielfeld-Konfigurationen oder null bei Fehler
      */
     String[] designListeHolen();
 
@@ -58,40 +61,54 @@ public interface ClientKomm { // Frank
      * Warteraum beitreten
      *
      * @param raumId Raum-ID
-     * @return Warteraum beigetreten: RET_ERFOLGREICH, Verbindungsfehler RET_VERBINDUNG_ABGEBROCHEN, sonst RET_FEHLER
+     * @return ERFOLGREICH: Warteraum wurde erstellt <br>
+     * FEHLER: maximale Warteraumanzahl erreicht <br>
+     * VERBINDUNG_ABGEBROCHEN: Fehler bei der Kommunikation
      */
     AllgemeinerReturnWert warteraumBeitreten(long raumId);
 
     /**
      * Warteraum verlassen
+     *
+     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
      */
     void warteraumVerlassen(long raumId);
 
     /**
      * Bot in Warteraum hinzufügen
      *
-     * @return Bot hinzugefügt: RET_ERFOLGREICH, Verbindungsfehler RET_VERBINDUNG_ABGEBROCHEN, sonst RET_FEHLER
+     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
+     * @return ERFOLGREICH: Bot hinzugefügt <br>
+     * FEHLER: Warteraum schon voll/nicht in Warteraum <br>
+     * VERBINDUNG_ABGEBROCHEN: Fehler bei der Kommunikation
      */
     AllgemeinerReturnWert botHinzufuegen(long raumId);
 
     /**
      * Bot aus Warteraum Entfernen
      *
-     * @return Bot entfernt: RET_ERFOLGREICH, Verbindungsfehler RET_VERBINDUNG_ABGEBROCHEN, sonst RET_FEHLER
+     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
+     * @return ERFOLGREICH: Bot entfernt <br>
+     * FEHLER: kein Bot mehr im Warteraum/nicht in Warteraum <br>
+     * VERBINDUNG_ABGEBROCHEN: Fehler bei der Kommunikation
      */
     AllgemeinerReturnWert botEntfernen(long raumId);
 
     /**
      * Spiel aus Warteraum starten
      *
-     * @return Spiel gestartet: RET_ERFOLGREICH, Verbindungsfehler RET_VERBINDUNG_ABGEBROCHEN, sonst RET_FEHLER
+     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
+     * @return ERFOLGREICH: Spiel wurde gestartet <br>
+     * FEHLER: nicht genügend Spieler in Warteraum <br>
+     * VERBINDUNG_ABGEBROCHEN: Fehler bei der Kommunikation
      */
     AllgemeinerReturnWert spielStarten(long raumId);
 
     /**
      * Spieldesign im Warteraum ändern
      *
-     * @param design Design
+     * @param design Design, dass gesetzt werden soll
+     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
      */
     void designAnpassen(String design, long raumId);
 
@@ -103,11 +120,14 @@ public interface ClientKomm { // Frank
      *
      * @param von  Feld von
      * @param nach Feld nach
+     * @return entsprechend dem Anwendungsfall
      */
     ZiehenRueckgabe figurZiehen(int von, int nach);
 
     /**
      * Würfeln
+     *
+     * @return entsprechend dem Anwendungsfall
      */
     WuerfelnRueckgabe wuerfeln();
 
