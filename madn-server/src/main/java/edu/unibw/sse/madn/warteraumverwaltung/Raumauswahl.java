@@ -9,12 +9,11 @@ public interface Raumauswahl {
     void fuerUpdatesAnmelden(String benutzername);
 
     /**
-     * Warteraum erstellen
+     * Warteraum erstellen(Domenik)
      *
      * Überprüft, ob bereits 25 aktive Warteräume existieren, ist dies der Fall wird false zurückgegeben,
-     * ansonsten wird ein neuer Warteraum erstellt.
-     * Daraufhin wird die funktion "warteraumBeitreten" mit der entsprechenden Raum-ID und benutzernamen aufgerufen.
-     * wenn dies erfolgreich ist, wird true zurückgegeben anderenfalls wird false zurückgegeben
+     * ansonsten wird ein neuer Warteraum erstellt, der Nutzer wird diesem zugeordnet und tritt diesem bei.
+     * Daraufhin wird er Warteraum aktualisiert
      *
      * @param benutzername
      * @return Warteraum erstellt: true, sonst false
@@ -22,11 +21,13 @@ public interface Raumauswahl {
     boolean warteraumErstellen(String benutzername);
 
     /**
-     * Warteraum beitreten
+     * Warteraum beitreten(Domenik)
      *
      * Zu nächst wird überprüft, ob der angegebene Warteraum existiert, falls nicht, wird false zurückgegeben, anderen, falls
-     * wird der angegebene Nutzer diesem Warteraum zugeordnet und tritt diesem bei (true wird zurückgegeben.
+     * wird der angegebene Nutzer diesem Warteraum zugeordnet und tritt diesem bei (true wird zurückgegeben).
+     * Daraufhin wird er Warteraum aktualisiert
      * Sollte der Nutzer jedoch schon einem Warteraum zugeordnet sein wird auch false zurückgegeben.
+     *
      *
      * @param benutzername
      * @param raumId  Raum-ID
@@ -35,11 +36,12 @@ public interface Raumauswahl {
     boolean warteraumBeitreten(String benutzername, long raumId);
 
     /**
-     * Warteraum verlassen
+     * Warteraum verlassen(Domenik)
      *
      * zunächst wird überprüft wie viele spieler sich noch im warteraum befinden, sollte der aktuelle benutzer der letzte
      * spieler im Warteraum sein wird er diesem nicht länger zugeordnet und verlässt ihn woraufhin der Warteraum gelöscht wird.
      * Sollte der Nutzer nicht der letzte Spieler in Warteraum wird er diesem nicht länger zugeordnet und verlässt diesen woraufhin der warteraum aktualisiert wird.
+     *
      *
      * @param benutzername
      * @param raumId RaumId des raumes in dem sich der Nutzer aktuell befindet
@@ -47,7 +49,7 @@ public interface Raumauswahl {
     void warteraumVerlassen(String benutzername, long raumId);
 
     /**
-     * Bot hinzufügen
+     * Bot hinzufügen(Domenik)
      *
      * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
      * Daraufhin wird überprüft, ob sich bereits insgesamt 4 spieler und bots im Raum befinden, ist dies der Fall wird false zurückgegeben.
@@ -61,7 +63,7 @@ public interface Raumauswahl {
     boolean botHinzufuegen(String benutzername, long raumId);
 
     /**
-     * Bot Entfernen
+     * Bot Entfernen(Domenik)
      *
      * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
      * Daraufhin wird geprüft, ob mindestens ein bot im Raum ist, ist dies nicht der Fall wird false zurückgegeben, anderenfalls wird ein
@@ -75,7 +77,7 @@ public interface Raumauswahl {
     boolean botEntfernen(String benutzername, long raumId);
 
     /**
-     * Spiel starten
+     * Spiel starten(Domenik)
      *
      * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
      * Erstellt zunächst ein neues spiel mit allen dem Warteraum momentan zugeordneten Nutzern und Bots.
@@ -88,11 +90,12 @@ public interface Raumauswahl {
     boolean spielStarten(String benutzername, long raumId);
 
     /**
-     * Spieldesign ändern
+     * Spieldesign ändern(Domenik)
      *
      * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird nichts unternommen.
      * Daraufhin wird geprüft, ob das angegebene design schon das ausgewählte ist, ist dies nicht der Fall, wird das Design dess Warteraums angepasst
      * Anderenfalls wird nichts getan.
+     * Daraufhin wird er Warteraum aktualisiert
      *
      * @param benutzername
      * @param raumId RaumId des raumes in dem sich der Nutzer aktuell befindet
