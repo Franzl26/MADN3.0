@@ -11,6 +11,8 @@ public interface DatenClient {
     byte[] balkenBildLaden();
 
     /**
+     * lädt die Konfiguration mit dem ausgewählten Namen
+     * 
      * @param name Name des Designs
      * @return null bei Fehler sonst: Spielfeldkonfiguration
      */
