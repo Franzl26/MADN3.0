@@ -4,6 +4,9 @@ import edu.unibw.sse.madn.base.Spielstatistik;
 import edu.unibw.sse.madn.base.WuerfelnRueckgabe;
 import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 
+/**
+ * Markus
+ */
 public interface Spiel { // Markus
     /**
      * Spielzug einreichen
@@ -16,7 +19,7 @@ public interface Spiel { // Markus
      *
      * @param benutzername  Name des Spielers der gewürfelt hat
      * @param von           Feld von dem die Spielfigur bewegt wurde
-     * @param nach          Feld zum dem die Spielfigur bewegt wurde
+     * @param nach          Feld zu dem die Spielfigur bewegt wurde
      * @return ZiehenRueckgabe
      */
     ZiehenRueckgabe figurZiehen(String benutzername, int von, int nach);
