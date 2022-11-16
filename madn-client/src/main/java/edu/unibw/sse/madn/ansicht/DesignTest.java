@@ -33,7 +33,7 @@ public class DesignTest extends Application {
          * Hier anpassen
          */
         private static final int[] spieler1 = new int[]{69, 71, 18, 19};
-        private static final int[] spieler2 = new int[]{39, 23, 21, 41};
+        private static final int[] spieler2 = new int[]{39, 23, 20, 41};
         private static final int[] spieler3 = new int[]{26, 25, 24, 50};
         private static final int[] spieler4 = new int[]{};
 
