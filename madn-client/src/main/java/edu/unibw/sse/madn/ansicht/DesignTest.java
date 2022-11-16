@@ -32,10 +32,10 @@ public class DesignTest extends Application {
         /**
          * Hier anpassen
          */
-        private static final int[] spieler1 = new int[]{0, 1, 2, 3};
-        private static final int[] spieler2 = new int[]{4, 5, 6, 7};
-        private static final int[] spieler3 = new int[]{8, 9, 10, 11};
-        private static final int[] spieler4 = new int[]{12, 13, 14, 15};
+        private static final int[] spieler1 = new int[]{69, 71, 18, 19};
+        private static final int[] spieler2 = new int[]{39, 23, 21, 41};
+        private static final int[] spieler3 = new int[]{26, 25, 24, 50};
+        private static final int[] spieler4 = new int[]{};
 
         public DesignPane() {
 
@@ -49,26 +49,26 @@ public class DesignTest extends Application {
             FeldBesetztStatus[] feld = new FeldBesetztStatus[72];
             Arrays.fill(feld, FELD_LEER);
             for (int i = 0; i < 4; i++) {
-                feld[spieler1[i]] = FELD_SPIELER1;
-                feld[spieler2[i]] = FELD_SPIELER2;
-                feld[spieler3[i]] = FELD_SPIELER3;
-                feld[spieler4[i]] = FELD_SPIELER4;
+                if (spieler1.length > i) feld[spieler1[i]] = FELD_SPIELER1;
+                if (spieler2.length > i) feld[spieler2[i]] = FELD_SPIELER2;
+                if (spieler3.length > i) feld[spieler3[i]] = FELD_SPIELER3;
+                if (spieler4.length > i) feld[spieler4[i]] = FELD_SPIELER4;
             }
             String array = Arrays.toString(feld).replaceAll("\\[", "{").replaceAll("]", "}");
             System.out.println(array);
             System.out.println("oder");
-            System.out.println("int[] spieler1 = new int[]"+Arrays.toString(spieler1).replaceAll("\\[", "{").replaceAll("]", "}") +";\n"+
-                    "int[] spieler2 = new int[]"+Arrays.toString(spieler2).replaceAll("\\[", "{").replaceAll("]", "}") +";\n"+
-                    "int[] spieler3 = new int[]"+Arrays.toString(spieler3).replaceAll("\\[", "{").replaceAll("]", "}") +";\n"+
-                    "int[] spieler4 = new int[]"+Arrays.toString(spieler4).replaceAll("\\[", "{").replaceAll("]", "}") +";\n"+
-                                """
-                                Arrays.fill(feld, FELD_LEER);
-                                for (int i = 0; i<4;i++) {
-                                    feld[spieler1[i]] = FELD_SPIELER1;
-                                    feld[spieler2[i]] = FELD_SPIELER2;
-                                    feld[spieler3[i]] = FELD_SPIELER3;
-                                    feld[spieler4[i]] = FELD_SPIELER4;
-                                }""");
+            System.out.println("int[] spieler1 = new int[]" + Arrays.toString(spieler1).replaceAll("\\[", "{").replaceAll("]", "}") + ";\n" +
+                    "int[] spieler2 = new int[]" + Arrays.toString(spieler2).replaceAll("\\[", "{").replaceAll("]", "}") + ";\n" +
+                    "int[] spieler3 = new int[]" + Arrays.toString(spieler3).replaceAll("\\[", "{").replaceAll("]", "}") + ";\n" +
+                    "int[] spieler4 = new int[]" + Arrays.toString(spieler4).replaceAll("\\[", "{").replaceAll("]", "}") + ";\n" +
+                    """
+                            Arrays.fill(feld, FELD_LEER);
+                            for (int i = 0; i<4;i++) {
+                                feld[spieler1[i]] = FELD_SPIELER1;
+                                feld[spieler2[i]] = FELD_SPIELER2;
+                                feld[spieler3[i]] = FELD_SPIELER3;
+                                feld[spieler4[i]] = FELD_SPIELER4;
+                            }""");
 
             drawBoardAllPrivate(gcBoard, feld);
 
