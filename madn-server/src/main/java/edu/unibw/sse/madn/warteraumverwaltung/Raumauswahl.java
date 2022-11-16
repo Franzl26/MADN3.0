@@ -85,18 +85,5 @@ public interface Raumauswahl {
      */
     boolean spielStarten(String benutzername, long raumId);
 
-    /**
-     * Spieldesign ändern
-     * <p>
-     * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird nichts unternommen.
-     * Daraufhin wird geprüft, ob das angegebene design schon das ausgewählte ist, ist dies nicht der Fall, wird das Design des Warteraums angepasst
-     * Anderenfalls wird nichts getan.
-     *
-     * @param benutzername Benutzername des Clients, der die Aktion ausgelöst hat
-     * @param raumId       RaumId des raumes in dem sich der Nutzer aktuell befindet
-     * @param design       Design
-     */
-    void designAnpassen(String benutzername, String design, long raumId);
-
     void anClientSendenRaumauswahlSetzen(AnClientSendenRaumauswahl anClientSendenRaumauswahl);
 }

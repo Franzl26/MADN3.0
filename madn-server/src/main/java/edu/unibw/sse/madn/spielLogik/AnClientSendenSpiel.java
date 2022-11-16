@@ -7,35 +7,35 @@ public interface AnClientSendenSpiel {
     /**
      * Spielfeld aktualisieren
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzername Namen der Clients die informiert werden sollen
      * @param feld         Feld
      * @param geandert     array der geänderten Felder, wenn null komplett neu zeichnen
      */
-    void spielfeldUpdaten(String benutzername, FeldBesetztStatus[] feld, int[] geandert);
+    void spielfeldUpdaten(String[] benutzername, FeldBesetztStatus[] feld, int[] geandert);
 
     /**
      * Namen der Spieler übermitteln
      *
-     * @param benutzername Name des Clients der informiert werden soll
-     * @param namen        Namen
+     * @param benutzername Namen der Clients die informiert werden sollen
+     * @param namen        Namen die übermittelt werden sollen
      */
-    void spielNamenUpdaten(String benutzername, String[] namen);
+    void spielNamenUpdaten(String[] benutzername, String[] namen);
 
     /**
      * aktuellen Spieler setzen
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzername Namen der Clients die informiert werden sollen
      * @param spieler      Spieler
      */
-    void aktuellenSpielerSetzen(String benutzername, int spieler);
+    void aktuellenSpielerSetzen(String[] benutzername, int spieler);
 
     /**
      * Würfelwert übermitteln
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzername Namen der Clients die informiert werden sollen
      * @param wert         Würfelwert
      */
-    void wuerfelUpdaten(String benutzername, int wert);
+    void wuerfelUpdaten(String[] benutzername, int wert);
 
     /**
      * Anzeigen, dass Zeit fürs Würfeln abgelaufen
@@ -61,8 +61,8 @@ public interface AnClientSendenSpiel {
     /**
      * Teilt Client mit, dass Spiel vorbei und übermittelt ihm Spielstatistik
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzername Namen der Clients die informiert werden sollen
      * @param statistik    Spielstatistik
      */
-    void spielVorbei(String benutzername, Spielstatistik statistik);
+    void spielVorbei(String[] benutzername, Spielstatistik statistik);
 }

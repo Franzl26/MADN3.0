@@ -107,14 +107,6 @@ public interface ClientKomm {
      */
     AllgemeinerReturnWert spielStarten(long raumId);
 
-    /**
-     * Spieldesign im Warteraum ändern
-     *
-     * @param design Design, dass gesetzt werden soll
-     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
-     */
-    void designAnpassen(String design, long raumId);
-
 
     // Spiel
 

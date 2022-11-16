@@ -20,12 +20,4 @@ public interface SpielDesign {
      * @return die geladene Spielfeld-Konfiguration oder null bei Fehler
      */
     SpielfeldKonfiguration spielfeldKonfigurationHolen(String name);
-
-    /**
-     * Prüft, ob es das Design mit dem ausgewählten namen gibt
-     *
-     * @param design Design
-     * @return true: wenn es das Design gibt, false: wenn nicht
-     */
-    boolean existiertDesign(String design);
 }

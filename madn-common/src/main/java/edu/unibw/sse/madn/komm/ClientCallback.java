@@ -21,16 +21,6 @@ public interface ClientCallback extends Remote {
     void raeumeUpdaten(Warteraum[] warteraeume) throws RemoteException;
 
 
-    // Warteraum
-
-    /**
-     * mitteilen, dass Spiel gestartet wurde
-     *
-     * @param design ausgewähltes Design
-     */
-    void spielStartet(String design) throws RemoteException;
-
-
     // im Spiel
 
     /**

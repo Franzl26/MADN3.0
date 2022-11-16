@@ -76,13 +76,6 @@ public interface Sitzung extends Remote {
      */
     boolean spielStarten(long raumId) throws RemoteException;
 
-    /**
-     * Spieldesign ändern
-     *
-     * @param design Design
-     */
-    void designAnpassen(String design, long raumId) throws RemoteException;
-
 
     // Spiel
 
