@@ -6,6 +6,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.security.PublicKey;
 
+/**
+ * Tom
+ */
 public interface ServerVerbindung extends Remote {
     /**
      * Benutzer anmelden

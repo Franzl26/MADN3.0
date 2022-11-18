@@ -61,8 +61,8 @@ public interface AnClientSendenSpiel {
     /**
      * Teilt Client mit, dass Spiel vorbei und übermittelt ihm Spielstatistik
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzername Namen der Clients die informiert werden sollen
      * @param statistik    Spielstatistik
      */
-    void spielVorbei(String benutzername, Spielstatistik statistik);
+    void spielVorbei(String[] benutzername, Spielstatistik statistik);
 }

@@ -94,7 +94,7 @@ public interface Raumauswahl {
      * Anderenfalls wird nichts getan.
      * Daraufhin wird er Warteraum aktualisiert
      *
-     * @param benutzernamegit
+     * @param benutzername
      * @param design  Design
      */
     void designAnpassen(String benutzername, String design);

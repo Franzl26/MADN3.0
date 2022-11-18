@@ -1,5 +1,8 @@
 package edu.unibw.sse.madn.datenServer;
 
+/**
+ * Nico
+ */
 public interface BenutzerDaten {
     /**
      * Speichert einen Benutzer ab

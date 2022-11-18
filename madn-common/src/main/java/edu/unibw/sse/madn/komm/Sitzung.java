@@ -8,6 +8,9 @@ import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * Tom
+ */
 public interface Sitzung extends Remote {
     // Nutzerverwaltung
 
@@ -72,13 +75,6 @@ public interface Sitzung extends Remote {
      * @return Spiel gestartet: true, sonst false
      */
     boolean spielStarten(long raumId) throws RemoteException;
-
-    /**
-     * Spieldesign ändern
-     *
-     * @param design Design
-     */
-    void designAnpassen(String design, long raumId) throws RemoteException;
 
 
     // Spiel

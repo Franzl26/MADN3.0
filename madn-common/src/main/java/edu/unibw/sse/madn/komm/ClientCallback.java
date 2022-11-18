@@ -7,6 +7,9 @@ import edu.unibw.sse.madn.base.Warteraum;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * Tom
+ */
 public interface ClientCallback extends Remote {
     // Raumauswahl
 
@@ -16,16 +19,6 @@ public interface ClientCallback extends Remote {
      * @param warteraeume Alle aktuell verfügbaren Warteräume
      */
     void raeumeUpdaten(Warteraum[] warteraeume) throws RemoteException;
-
-
-    // Warteraum
-
-    /**
-     * mitteilen, dass Spiel gestartet wurde
-     *
-     * @param design ausgewähltes Design
-     */
-    void spielStartet(String design) throws RemoteException;
 
 
     // im Spiel
