@@ -38,69 +38,65 @@ public interface Raumauswahl {
     /**
      * Warteraum verlassen(Domenik)
      *
-     * zunächst wird überprüft wie viele spieler sich noch im warteraum befinden, sollte der aktuelle benutzer der letzte
+     * zunächst wird überprüft wie viele spieler sich noch in einem warteraum befinden, sollte der aktuelle benutzer der letzte
      * spieler im Warteraum sein wird er diesem nicht länger zugeordnet und verlässt ihn woraufhin der Warteraum gelöscht wird.
      * Sollte der Nutzer nicht der letzte Spieler in Warteraum wird er diesem nicht länger zugeordnet und verlässt diesen woraufhin der warteraum aktualisiert wird.
      *
      *
      * @param benutzername
-     * @param raumId RaumId des raumes in dem sich der Nutzer aktuell befindet
+     *
      */
-    void warteraumVerlassen(String benutzername, long raumId);
+    void warteraumVerlassen(String benutzername);
 
     /**
      * Bot hinzufügen(Domenik)
      *
-     * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
+     * Zunächst wird überprüft ob der angegebene benutzername einem Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
      * Daraufhin wird überprüft, ob sich bereits insgesamt 4 spieler und bots im Raum befinden, ist dies der Fall wird false zurückgegeben.
      * Anderenfalls wird ein Bot in den Warteraum hinzugefügt, die bot anzahl wird erhöht und es wird true zurückgegeben.
      * Daraufhin wird er Warteraum aktualisiert.
      *
      * @param benutzername
-     * @param raumId RaumId des raumes in dem sich der Nutzer aktuell befindet
      * @return Bot hinzugefügt: true, sonst false
      */
-    boolean botHinzufuegen(String benutzername, long raumId);
+    boolean botHinzufuegen(String benutzername);
 
     /**
      * Bot Entfernen(Domenik)
      *
-     * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
+     * Zunächst wird überprüft, ob der angegebene Nutzer einem Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
      * Daraufhin wird geprüft, ob mindestens ein bot im Raum ist, ist dies nicht der Fall wird false zurückgegeben, anderenfalls wird ein
      * Bot aus dem Warteraum entfernt, die bot anzahl heruntergesetzt und true zurückgegeben.
      * Daraufhin wird er Warteraum aktualisiert.
      *
      * @param benutzername
-     * @param raumId RaumId des raumes in dem sich der Nutzer aktuell befindet
      * @return Bot entfernt: true, sonst false
      */
-    boolean botEntfernen(String benutzername, long raumId);
+    boolean botEntfernen(String benutzername);
 
     /**
      * Spiel starten(Domenik)
      *
-     * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
+     * Zunächst wird überprüft ob der angegebene benutzername einem Warteraum zugeordnet ist er dies nicht wird false zurückgegeben.
      * Erstellt zunächst ein neues spiel mit allen dem Warteraum momentan zugeordneten Nutzern und Bots.
      * Teilt darauf den Clients der Nutzer mit, dass das Spiel gestartet wurde
      *
      * @param benutzername
-     * @param raumId RaumId des raumes in dem sich der Nutzer aktuell befindet
      * @return Spiel gestartet: true, sonst false
      */
-    boolean spielStarten(String benutzername, long raumId);
+    boolean spielStarten(String benutzername);
 
     /**
      * Spieldesign ändern(Domenik)
      *
-     * Zunächst wird überprüft ob der angegebene benutzername dem angegebenen Warteraum zugeordnet ist er dies nicht wird nichts unternommen.
+     * Zunächst wird überprüft ob der angegebene benutzername einem Warteraum zugeordnet ist er dies nicht wird nichts unternommen.
      * Daraufhin wird geprüft, ob das angegebene design schon das ausgewählte ist, ist dies nicht der Fall, wird das Design dess Warteraums angepasst
      * Anderenfalls wird nichts getan.
      * Daraufhin wird er Warteraum aktualisiert
      *
      * @param benutzername
-     * @param raumId RaumId des raumes in dem sich der Nutzer aktuell befindet
      * @param design  Design
      */
-    void designAnpassen(String benutzername, String design, long raumId);
+    void designAnpassen(String benutzername, String design);
     void anClientSendenRaumauswahlSetzen(AnClientSendenRaumauswahl anClientSendenRaumauswahl);
 }
