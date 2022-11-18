@@ -53,28 +53,28 @@ public interface Sitzung extends Remote {
     /**
      * Warteraum verlassen
      */
-    void warteraumVerlassen(long raumId) throws RemoteException;
+    void warteraumVerlassen() throws RemoteException;
 
     /**
      * Bot hinzufügen
      *
      * @return Bot hinzugefügt: true, sonst false
      */
-    boolean botHinzufuegen(long raumId) throws RemoteException;
+    boolean botHinzufuegen() throws RemoteException;
 
     /**
      * Bot Entfernen
      *
      * @return Bot entfernt: true, sonst false
      */
-    boolean botEntfernen(long raumId) throws RemoteException;
+    boolean botEntfernen() throws RemoteException;
 
     /**
      * Spiel starten
      *
      * @return Spiel gestartet: true, sonst false
      */
-    boolean spielStarten(long raumId) throws RemoteException;
+    boolean spielStarten() throws RemoteException;
 
 
     // Spiel

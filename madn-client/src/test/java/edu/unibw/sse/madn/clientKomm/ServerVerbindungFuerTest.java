@@ -93,24 +93,25 @@ public class ServerVerbindungFuerTest implements ServerVerbindung { // todo Rüc
         }
 
         @Override
-        public void warteraumVerlassen(long raumId) throws RemoteException {
+        public void warteraumVerlassen() throws RemoteException {
 
         }
 
         @Override
-        public boolean botHinzufuegen(long raumId) throws RemoteException {
+        public boolean botHinzufuegen() throws RemoteException {
             return false;
         }
 
         @Override
-        public boolean botEntfernen(long raumId) throws RemoteException {
+        public boolean botEntfernen() throws RemoteException {
             return false;
         }
 
         @Override
-        public boolean spielStarten(long raumId) throws RemoteException {
+        public boolean spielStarten() throws RemoteException {
             return false;
         }
+
 
         @Override
         public ZiehenRueckgabe figurZiehen(int von, int nach) throws RemoteException {

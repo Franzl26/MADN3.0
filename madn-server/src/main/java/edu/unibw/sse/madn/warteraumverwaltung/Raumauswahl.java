@@ -1,12 +1,6 @@
 package edu.unibw.sse.madn.warteraumverwaltung;
 
 public interface Raumauswahl {
-    /**
-     * meldet Client für die aktualisierung der Warteräume an
-     *
-     * @param benutzername Benutzername
-     */
-    void fuerUpdatesAnmelden(String benutzername);
 
     /**
      * Warteraum erstellen(Domenik)

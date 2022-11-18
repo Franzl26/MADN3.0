@@ -30,9 +30,9 @@ public interface DatenClient {
     void KonfigurationSpeichern(SpielfeldKonfiguration konfiguration, String name);
 
     /**
-     * lädt ein zufälliges Gif
+     * lädt alle gespeicherten Gifs
      *
-     * @return MP4-Gif oder null, wenn keins geladen werden konnte
+     * @return MP4-Gifs oder null, wenn Fehler aufgetreten sit
      */
-    Media zufaelligesGif();
+    Media[] alleGifsLaden();
 }

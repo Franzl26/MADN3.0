@@ -73,37 +73,34 @@ public interface ClientKomm {
     /**
      * Warteraum verlassen
      */
-    void warteraumVerlassen(long raumId);
+    void warteraumVerlassen();
 
     /**
      * Bot in Warteraum hinzufügen
      *
-     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
      * @return ERFOLGREICH: Bot hinzugefügt <br>
      * FEHLER: Warteraum schon voll/nicht in Warteraum <br>
      * VERBINDUNG_ABGEBROCHEN: Fehler bei der Kommunikation
      */
-    AllgemeinerReturnWert botHinzufuegen(long raumId);
+    AllgemeinerReturnWert botHinzufuegen();
 
     /**
      * Bot aus Warteraum Entfernen
      *
-     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
      * @return ERFOLGREICH: Bot entfernt <br>
      * FEHLER: kein Bot mehr im Warteraum/nicht in Warteraum <br>
      * VERBINDUNG_ABGEBROCHEN: Fehler bei der Kommunikation
      */
-    AllgemeinerReturnWert botEntfernen(long raumId);
+    AllgemeinerReturnWert botEntfernen();
 
     /**
      * Spiel aus Warteraum starten
      *
-     * @param raumId ID des Warteraums, dem der Nutzer beigetreten ist
      * @return ERFOLGREICH: Spiel wurde gestartet <br>
      * FEHLER: nicht genügend Spieler in Warteraum <br>
      * VERBINDUNG_ABGEBROCHEN: Fehler bei der Kommunikation
      */
-    AllgemeinerReturnWert spielStarten(long raumId);
+    AllgemeinerReturnWert spielStarten();
 
 
     // Spiel

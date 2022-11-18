@@ -7,4 +7,6 @@ public interface Ansicht {
     void dateizugriffClientSetzen(DatenClient datenClient);
 
     void clientKommunikationSetzen(ClientKomm clientKomm);
+
+    void anwendungStarten();
 }
