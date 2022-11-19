@@ -30,12 +30,12 @@ public class DesignTest extends Application {
 
     private static class DesignPane extends AnchorPane {
         /**
-         * Hier anpassen
+         * Hier anpassen - Feldpositionen nach TDM!
          */
-        private static final int[] spieler1 = new int[]{69, 71, 18, 19};
-        private static final int[] spieler2 = new int[]{39, 23, 20, 41};
-        private static final int[] spieler3 = new int[]{26, 25, 24, 50};
-        private static final int[] spieler4 = new int[]{};
+        private static final int[] spieler1 = new int[]{69, 71, 18, 19}; // gelb
+        private static final int[] spieler2 = new int[]{39, 23, 20, 41}; // grün
+        private static final int[] spieler3 = new int[]{26, 25, 24, 50}; // rot
+        private static final int[] spieler4 = new int[]{}; // blau
 
         public DesignPane() {
 
@@ -81,7 +81,7 @@ public class DesignTest extends Application {
         @SuppressWarnings("ConstantConditions")
         void drawBoardAllPrivate(GraphicsContext gc, FeldBesetztStatus[] feld) {
             int[][] pos = new int[][]{{50, 50}, {90, 50}, {50, 90}, {90, 90}, {410, 50}, {450, 50}, {410, 90}, {450, 90}, {410, 410}, {450, 410}, {410, 450}, {450, 450}, {50, 410}, {90, 410}, {50, 450}, {90, 450}, {90, 250}, {130, 250}, {170, 250}, {210, 250}, {250, 90}, {250, 130}, {250, 170}, {250, 210}, {410, 250}, {370, 250}, {330, 250}, {290, 250}, {250, 410}, {250, 370}, {250, 330}, {250, 290}, {50, 210}, {90, 210}, {130, 210}, {170, 210}, {210, 210}, {210, 170}, {210, 130}, {210, 90}, {210, 50}, {250, 50}, {290, 50}, {290, 90}, {290, 130}, {290, 170}, {290, 210}, {330, 210}, {370, 210}, {410, 210}, {450, 210}, {450, 250}, {450, 290}, {410, 290}, {370, 290}, {330, 290}, {290, 290}, {290, 330}, {290, 370}, {290, 410}, {290, 450}, {250, 450}, {210, 450}, {210, 410}, {210, 370}, {210, 330}, {210, 290}, {170, 290}, {130, 290}, {90, 290}, {50, 290}, {50, 250}};
-            File f = new File("C:\\Users\\f-luc\\Desktop\\JavaProjects\\ourproject-src\\madn-client\\src\\main\\resources\\designs\\Standard");
+            File f = new File("./madn-client/src/main/resources/designs/Standard");
             Image board = new Image(Paths.get(f.getAbsolutePath() + "/board.png").toUri().toString());
             Image pathNormal = new Image(Paths.get(f.getAbsolutePath() + "/pathNormal.png").toUri().toString());
             Image[] path = new Image[4];
@@ -92,7 +92,6 @@ public class DesignTest extends Application {
                 personal[i] = new Image(Paths.get(f.getAbsolutePath() + "/personal" + i + ".png").toUri().toString());
                 figure[i] = new Image(Paths.get(f.getAbsolutePath() + "/figure" + i + ".png").toUri().toString());
             }
-
             gc.setFill(Color.BLACK);
             gc.fillRect(0, 0, 500, 500);
             gc.drawImage(board, 0, 0, 500, 500);
