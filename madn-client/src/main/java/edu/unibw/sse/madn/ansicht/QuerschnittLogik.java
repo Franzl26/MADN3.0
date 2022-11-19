@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 
-public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten { // todo SpielUpdater Setzen
+public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
     private DatenClient datenClient;
     private ClientKomm clientKomm;
     private String benutzername = "";
@@ -160,22 +160,33 @@ public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten { // tod
         if (dialogWarteraum == null) {
             dialogWarteraum = DialogWarteraum.dialogWarteraumStart(this);
         }
+        String[] namen = namenAktuellerRaum();
+        if (namen != null) dialogWarteraum.drawNames(namen);
         dialogWarteraum.anzeigen();
     }
 
+    private Warteraum[] warteraeume;
+
     @Override
-    public void raeumeUpdaten(Warteraum[] warteraeume) {
+    public void raeumeUpdaten(Warteraum[] warteraeumeUeb) {
+        warteraeume = warteraeumeUeb;
         Platform.runLater(() -> {
             dialogRaumauswahl.displayRooms(warteraeume);
-            if (aktuellerWarteraum != -1) {
+            String[] namen = namenAktuellerRaum();
+            if (namen != null) dialogWarteraum.drawNames(namen);
+        });
+    }
+
+    private String[] namenAktuellerRaum() {
+        if (aktuellerWarteraum != -1) {
             /*List<Warteraum> rest = Arrays.stream(warteraeume).filter(warteraum -> warteraum.id() == aktuellerWarteraum).toList();
             if (rest.size() > 0) {
                 dialogWarteraum.drawNames(rest.get(0).namen());
             }*/
-                for (Warteraum r : warteraeume) {
-                    if (r.id() == aktuellerWarteraum) dialogWarteraum.drawNames(r.namen());
-                }
+            for (Warteraum r : warteraeume) {
+                if (r.id() == aktuellerWarteraum) return r.namen();
             }
-        });
+        }
+        return null;
     }
 }

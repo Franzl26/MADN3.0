@@ -42,6 +42,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         this.querschnittLogik = querschnittLogik;
         this.config = config;
 
+        querschnittLogik.getClientKomm().spielUpdaterSetzen(this);
         Arrays.fill(brettStatus, FELD_LEER);
 
         setBackground(Background.fill(Color.LIGHTSLATEGRAY));
