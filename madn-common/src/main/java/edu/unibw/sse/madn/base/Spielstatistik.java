@@ -1,5 +1,7 @@
 package edu.unibw.sse.madn.base;
 
+import java.io.Serializable;
+
 /**
  *
  * @param zahlenGewuerfelt die gewürfelten Zahlen nach Spieler und 1-6
@@ -10,5 +12,5 @@ package edu.unibw.sse.madn.base;
  * @param startZeit die Zeit zu der das Spiel gestartet wurde
  * @param namen die Namen in der Reihenfolge der Spieler entspricht der Reihenfolge von gewürfelt/geschlagen
  */
-public record Spielstatistik(int[][] zahlenGewuerfelt, int[] andereGeschlagen, int[] geschlagenWorden, int[] prioZugFalsch, String[] platzierungen, long startZeit, String[] namen) {
+public record Spielstatistik(int[][] zahlenGewuerfelt, int[] andereGeschlagen, int[] geschlagenWorden, int[] prioZugFalsch, String[] platzierungen, long startZeit, String[] namen) implements Serializable {
 }

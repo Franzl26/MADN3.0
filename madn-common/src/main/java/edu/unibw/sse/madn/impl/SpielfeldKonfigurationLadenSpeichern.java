@@ -111,6 +111,10 @@ public class SpielfeldKonfigurationLadenSpeichern {
 
     public static void saveConfiguration(SpielfeldKonfiguration config, String dir) {
         if (!dir.endsWith("/")) dir = dir.concat("/");
+        File f = new File(dir);
+        //noinspection ResultOfMethodCallIgnored
+        f.mkdir();
+
         saveFile(dir + "board.png", config.board());
         saveFile(dir + "pathNormal.png", config.pathNormal());
         saveFiles(dir, "dice", config.dice());

@@ -17,24 +17,26 @@ import javafx.stage.Stage;
 public class DialogRaumauswahl extends AnchorPane {
     private final ListView<HBox> roomsList;
     private final QuerschnittLogik querschnittLogik;
+    private final GraphicsContext gcName;
 
     public DialogRaumauswahl(QuerschnittLogik querschnittLogik) {
         this.querschnittLogik = querschnittLogik;
 
         Canvas nameCanvas = new Canvas(300, 40);
-        GraphicsContext gcName = nameCanvas.getGraphicsContext2D();
-        gcName.setFont(Font.font(30));
-        gcName.fillText(querschnittLogik.getBenutzername(), 5, 30, 300);
+        gcName = nameCanvas.getGraphicsContext2D();
 
         roomsList = new ListView<>();
         roomsList.setPrefWidth(800);
 
         Button newGameButton = new Button("Neuen Warteraum erstellen");
         newGameButton.addEventHandler(ActionEvent.ACTION, e -> {
+            querschnittLogik.setAktuellerWarteraum(-2);
             AllgemeinerReturnWert ret = querschnittLogik.getClientKomm().warteraumErstellen();
             switch (ret) {
-                case FEHLER ->
-                        Meldungen.zeigeInformation("Maximale Raumanzahl bereits erreicht", "Die maximale Anzahl an Warteräumen ist erreicht, es kann kein neuer erstellt werden.");
+                case FEHLER -> {
+                    Meldungen.zeigeInformation("Maximale Raumanzahl bereits erreicht", "Die maximale Anzahl an Warteräumen ist erreicht, es kann kein neuer erstellt werden.");
+                    querschnittLogik.setAktuellerWarteraum(-1);
+                }
                 case ERFOLGREICH -> {
                     querschnittLogik.dialogWarteraumOeffnen();
                     getScene().getWindow().hide();
@@ -129,5 +131,10 @@ public class DialogRaumauswahl extends AnchorPane {
 
     void anzeigen() {
         ((Stage) getScene().getWindow()).show();
+    }
+
+    public void namenSetzen(String benutzername) {
+        gcName.setFont(Font.font(30));
+        gcName.fillText(benutzername, 5, 30, 300);
     }
 }

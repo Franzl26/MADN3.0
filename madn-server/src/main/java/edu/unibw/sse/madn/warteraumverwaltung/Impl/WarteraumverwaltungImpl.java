@@ -28,6 +28,7 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
     @Override
     public void spielErstellenSetzen(SpielErstellen spielErstellen) {
         this.spielErstellen = spielErstellen;
+        spielErstellen.warteraumCallbackSetzen(this);
     }
 
     @Override

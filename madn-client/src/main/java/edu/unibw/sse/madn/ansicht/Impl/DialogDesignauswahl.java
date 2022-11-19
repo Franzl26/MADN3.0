@@ -83,6 +83,7 @@ public class DialogDesignauswahl extends AnchorPane {
         boardChoice.getItems().clear();
         boardChoice.getItems().addAll(designs);
         boardChoice.setValue("Standard");
+        boardChoice.hide();
     }
 
     private void setOnClose() {

@@ -23,10 +23,6 @@ public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
     private String ausgewaehltesDesign = "Standard";
     private long aktuellerWarteraum = -1;
 
-    public String getBenutzername() {
-        return benutzername;
-    }
-
     public void setAusgewaehltesDesign(String ausgewaehltesDesign) {
         this.ausgewaehltesDesign = ausgewaehltesDesign;
     }
@@ -57,7 +53,6 @@ public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
     public void anwendungStarten() {
         dialogAnmelden = DialogAnmelden.dialogAnmeldenStart(this);
         dialogAnmelden.anzeigen();
-        dialogRaumauswahl = DialogRaumauswahl.dialogRaumauswahlStart(this);
     }
 
     private final HashMap<String, SpielfeldKonfigurationIntern> designs = new HashMap<>();
@@ -121,12 +116,16 @@ public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
     void erfolgreichAngemeldet(String benutzername) {
         this.benutzername = benutzername;
         ((Stage) dialogAnmelden.getScene().getWindow()).close();
-        ((Stage) dialogRegistrieren.getScene().getWindow()).close();
+        if (dialogRegistrieren != null) ((Stage) dialogRegistrieren.getScene().getWindow()).close();
         dialogAnmelden = null;
         dialogRegistrieren = null;
     }
 
     void dialogRaumauswahlOeffnen() {
+        if (dialogRaumauswahl == null) {
+            dialogRaumauswahl = DialogRaumauswahl.dialogRaumauswahlStart(this);
+        }
+        dialogRaumauswahl.namenSetzen(benutzername);
         dialogRaumauswahl.anzeigen();
     }
 
@@ -172,14 +171,26 @@ public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
     public void raeumeUpdaten(Warteraum[] warteraeumeUeb) {
         warteraeume = warteraeumeUeb;
         Platform.runLater(() -> {
+            if (aktuellerWarteraum == -2) setAktuellerWarteraumAusListDurchNamen();
             dialogRaumauswahl.displayRooms(warteraeume);
             String[] namen = namenAktuellerRaum();
             if (namen != null) dialogWarteraum.drawNames(namen);
         });
     }
 
+    private void setAktuellerWarteraumAusListDurchNamen() {
+        for (Warteraum r : warteraeume) {
+            for (String s : r.namen()) {
+                if (s.equals(benutzername)) {
+                    aktuellerWarteraum = r.id();
+                    return;
+                }
+            }
+        }
+    }
+
     private String[] namenAktuellerRaum() {
-        if (aktuellerWarteraum != -1) {
+        if (aktuellerWarteraum >= 0) {
             /*List<Warteraum> rest = Arrays.stream(warteraeume).filter(warteraum -> warteraum.id() == aktuellerWarteraum).toList();
             if (rest.size() > 0) {
                 dialogWarteraum.drawNames(rest.get(0).namen());

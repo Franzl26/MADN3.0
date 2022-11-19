@@ -54,6 +54,8 @@ public class BenutzerIntern implements Serializable {
     }
 
     void benutzerKonvertieren(Benutzer[] benutzer) {
-
+        for (Benutzer b : benutzer) {
+            user.put(b.benutzername(), new Nutzer(b.passwortHash()));
+        }
     }
 }

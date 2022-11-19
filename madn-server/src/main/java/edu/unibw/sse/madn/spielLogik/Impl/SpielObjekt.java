@@ -443,8 +443,10 @@ public class SpielObjekt {
             ArrayList<String> clientsSenden = new ArrayList<>();
             Pattern pattern = Pattern.compile(".*\\d$");
             for (String c : clients) {
-                Matcher m = pattern.matcher(c);
-                if (!m.matches()) clientsSenden.add(c);
+                if (c != null) {
+                    Matcher m = pattern.matcher(c);
+                    if (!m.matches()) clientsSenden.add(c);
+                }
             }
             anClient.spielVorbei(clientsSenden.toArray(new String[0]), zumSenden);
         }).start();

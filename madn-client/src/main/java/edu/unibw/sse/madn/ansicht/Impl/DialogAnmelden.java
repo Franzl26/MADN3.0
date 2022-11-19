@@ -11,15 +11,16 @@ import javafx.stage.Stage;
 
 public class DialogAnmelden extends AnchorPane {
     public DialogAnmelden(QuerschnittLogik querschnittLogik) {
-        TextField serverTextField = new TextField();
+        TextField serverTextField = new TextField("localhost");
         serverTextField.setPromptText("Server-IP-Adresse");
         serverTextField.setPrefWidth(280);
 
-        TextField usernameTextField = new TextField();
+        TextField usernameTextField = new TextField("Frank");
         usernameTextField.setPromptText("Benutzername");
         usernameTextField.setPrefWidth(280);
 
         PasswordField passwordField = new PasswordField();
+        passwordField.setText("abcdef1!");
         passwordField.setPromptText("Passwort");
         passwordField.setPrefWidth(280);
 

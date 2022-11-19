@@ -103,7 +103,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
 
     @Override
     public void raeumeUpdaten(Warteraum[] warteraeume) {
-        for (Sitzung s : serverKommunikation.allBenutzerHolen()) {
+        for (Sitzung s : serverKommunikation.alleBenutzerHolen()) {
             new Thread(() -> {
                 try {
                     s.clientCallback().raeumeUpdaten(warteraeume);

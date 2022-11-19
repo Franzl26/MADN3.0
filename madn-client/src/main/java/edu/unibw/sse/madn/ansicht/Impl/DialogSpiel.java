@@ -22,7 +22,8 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 
-import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.*;
+import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.drawBoardAll;
+import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.drawBoardSingleFieldAll;
 import static edu.unibw.sse.madn.base.FeldBesetztStatus.FELD_LEER;
 
 public class DialogSpiel extends AnchorPane implements SpielUpdaten {
@@ -113,6 +114,8 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     }
 
     private void drawDiceIntern(int number) {
+        gcDice.setFill(Color.LIGHTSLATEGRAY);
+        gcDice.fillRect(0, 0, 100, 100);
         gcDice.drawImage(config.dice[number], 0, 0, 100, 100);
     }
 

@@ -20,7 +20,6 @@ public class BenutzerZugangImpl implements BenutzerZugang, BenutzerVerwaltung {
 
     public BenutzerZugangImpl() {
         benutzer = new BenutzerIntern();
-        benutzer.benutzerKonvertieren(benutzerDaten.benutzerLaden());
         new Timer().schedule(new NutzerLoeschen(), 3600000, 3600000);
     }
 
@@ -91,6 +90,7 @@ public class BenutzerZugangImpl implements BenutzerZugang, BenutzerVerwaltung {
     @Override
     public void benutzerDatenSetzen(BenutzerDaten benutzerDaten) {
         this.benutzerDaten = benutzerDaten;
+        benutzer.benutzerKonvertieren(benutzerDaten.benutzerLaden());
     }
 
     private class NutzerLoeschen extends TimerTask {

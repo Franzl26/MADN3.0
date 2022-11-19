@@ -1,9 +1,10 @@
 package edu.unibw.sse.madn.datenServer;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public record Benutzer(String benutzername, byte[] passwortHash, long zuletztEingeloggt) {
+public record Benutzer(String benutzername, byte[] passwortHash, long zuletztEingeloggt) implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
