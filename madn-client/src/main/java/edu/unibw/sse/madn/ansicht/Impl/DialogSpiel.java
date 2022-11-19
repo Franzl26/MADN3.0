@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.ansicht;
+package edu.unibw.sse.madn.ansicht.Impl;
 
 import edu.unibw.sse.madn.base.FeldBesetztStatus;
 import edu.unibw.sse.madn.base.Spielstatistik;
@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 import java.util.Arrays;
 
-import static edu.unibw.sse.madn.ansicht.BrettZeichnen.*;
+import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.*;
 import static edu.unibw.sse.madn.base.FeldBesetztStatus.FELD_LEER;
 
 public class DialogSpiel extends AnchorPane implements SpielUpdaten {

@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.ansicht;
+package edu.unibw.sse.madn.ansicht.Impl;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;

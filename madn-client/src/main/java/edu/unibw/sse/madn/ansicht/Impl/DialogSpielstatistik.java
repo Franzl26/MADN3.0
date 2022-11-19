@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.ansicht;
+package edu.unibw.sse.madn.ansicht.Impl;
 
 import edu.unibw.sse.madn.base.Spielstatistik;
 import javafx.event.ActionEvent;

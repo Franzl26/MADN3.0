@@ -1,4 +1,4 @@
-package edu.unibw.sse.madn.ansicht;
+package edu.unibw.sse.madn.ansicht.Impl;
 
 import edu.unibw.sse.madn.base.RegistrierenRueckgabe;
 import javafx.event.ActionEvent;
@@ -55,9 +55,7 @@ public class DialogRegistrieren extends AnchorPane {
             }
         });
         Button abbrechenButton = new Button("Abbrechen");
-        abbrechenButton.addEventHandler(ActionEvent.ACTION, e -> {
-            schliessen();
-        });
+        abbrechenButton.addEventHandler(ActionEvent.ACTION, e -> schliessen());
 
         AnchorPane.setLeftAnchor(serverTextField, 10.0);
         AnchorPane.setTopAnchor(serverTextField, 10.0);

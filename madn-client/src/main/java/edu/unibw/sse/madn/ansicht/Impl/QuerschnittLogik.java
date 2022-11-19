@@ -1,5 +1,6 @@
-package edu.unibw.sse.madn.ansicht;
+package edu.unibw.sse.madn.ansicht.Impl;
 
+import edu.unibw.sse.madn.ansicht.Ansicht;
 import edu.unibw.sse.madn.base.SpielfeldKonfiguration;
 import edu.unibw.sse.madn.base.Spielstatistik;
 import edu.unibw.sse.madn.base.Warteraum;

@@ -129,11 +129,6 @@ public class ServerVerbindungFuerTest implements ServerVerbindung { // todo Rüc
         }
 
         @Override
-        public String benutzername() throws RemoteException {
-            return null;
-        }
-
-        @Override
         public ClientCallback clientCallback() throws RemoteException {
             return null;
         }

@@ -12,6 +12,13 @@ public interface BenutzerDaten {
     void benutzerSpeichern(Benutzer benutzer);
 
     /**
+     * Löscht den Benutzer aus dem Speicher
+     *
+     * @param benutzer Benutzer
+     */
+    void benutzerLoeschen(Benutzer benutzer);
+
+    /**
      * Lädt Benutzerdaten
      *
      * @return geladene Benutzer oder null, wenn keine Datei gefunden/Fehler aufgetreten

@@ -2,6 +2,7 @@ module madn.client {
     requires transitive madn.common;
     requires javafx.media;
     requires javafx.controls;
+    requires java.rmi;
 
     opens edu.unibw.sse.madn.ansicht;
 
@@ -10,4 +11,6 @@ module madn.client {
     exports edu.unibw.sse.madn.datenClient;
     exports edu.unibw.sse.madn.app;
     opens edu.unibw.sse.madn.app;
+    exports edu.unibw.sse.madn.ansicht.Impl;
+    opens edu.unibw.sse.madn.ansicht.Impl;
 }
