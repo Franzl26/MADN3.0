@@ -22,7 +22,7 @@ public class SpielstatistikIntern {
     }
 
     void namenSetzen(String[] names) {
-        this.names = names;
+        this.names = names.clone();
     }
 
     void incZahlGewuerfelt(int spieler, int zahl) {
