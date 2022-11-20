@@ -14,10 +14,10 @@ import javafx.stage.Stage;
 
 public class DialogSpielstatistik extends AnchorPane {
     private final GraphicsContext gc;
-    private final QuerschnittLogik querschnittLogik;
+    private final AnsichtImpl ansichtImpl;
 
-    private DialogSpielstatistik(QuerschnittLogik querschnittLogik) {
-        this.querschnittLogik = querschnittLogik;
+    private DialogSpielstatistik(AnsichtImpl ansichtImpl) {
+        this.ansichtImpl = ansichtImpl;
 
         Canvas canvas = new Canvas(780, 710);
         gc = canvas.getGraphicsContext2D();
@@ -40,7 +40,7 @@ public class DialogSpielstatistik extends AnchorPane {
         String[] names = stats.namen();
         int anzahl = names.length;
 
-        Image image = querschnittLogik.balkenBild();
+        Image image = ansichtImpl.balkenBild();
 
         gc.setFill(Color.BLACK);
         gc.setLineWidth(1.0);
@@ -103,12 +103,12 @@ public class DialogSpielstatistik extends AnchorPane {
     }
 
     private void verlassen() {
-        querschnittLogik.dialogRaumauswahlOeffnen();
+        ansichtImpl.dialogRaumauswahlOeffnen();
         ((Stage)getScene().getWindow()).close();
     }
 
-    public static void dialogSpielstatistikStart(QuerschnittLogik querschnittLogik, Spielstatistik spielstatistik) {
-        DialogSpielstatistik root = new DialogSpielstatistik(querschnittLogik);
+    public static void dialogSpielstatistikStart(AnsichtImpl ansichtImpl, Spielstatistik spielstatistik) {
+        DialogSpielstatistik root = new DialogSpielstatistik(ansichtImpl);
         Scene scene = new Scene(root, 800, 730);
         Stage stage = new Stage();
 

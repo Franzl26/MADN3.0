@@ -6,16 +6,23 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class DialogAnmelden extends AnchorPane {
-    public DialogAnmelden(QuerschnittLogik querschnittLogik) {
-        TextField serverTextField = new TextField("localhost");
+    private final AnsichtImpl ansichtImpl;
+    private final TextField serverTextField;
+    private final TextField usernameTextField;
+    public DialogAnmelden(AnsichtImpl ansichtImpl) {
+        this.ansichtImpl = ansichtImpl;
+
+        serverTextField = new TextField("localhost");
         serverTextField.setPromptText("Server-IP-Adresse");
         serverTextField.setPrefWidth(280);
 
-        TextField usernameTextField = new TextField("Frank");
+        usernameTextField = new TextField("Frank");
         usernameTextField.setPromptText("Benutzername");
         usernameTextField.setPrefWidth(280);
 
@@ -26,25 +33,13 @@ public class DialogAnmelden extends AnchorPane {
 
         Button registrierenButton = new Button("Registrieren");
         registrierenButton.addEventHandler(ActionEvent.ACTION, e -> {
-            querschnittLogik.dialogRegistrierenOeffnen();
+            ansichtImpl.dialogRegistrierenOeffnen(serverTextField.getText(),usernameTextField.getText());
             getScene().getWindow().hide();
         });
         Button abbrechenButton = new Button("Abbrechen");
         abbrechenButton.addEventHandler(ActionEvent.ACTION, e -> System.exit(0));
         Button anmeldenButton = new Button("Anmelden");
-        anmeldenButton.addEventHandler(ActionEvent.ACTION, e -> {
-            AllgemeinerReturnWert ret = querschnittLogik.getClientKomm().anmelden(serverTextField.getText(), usernameTextField.getText(), passwordField.getText());
-            switch (ret) {
-                case ERFOLGREICH -> {
-                    querschnittLogik.erfolgreichAngemeldet(usernameTextField.getText());
-                    querschnittLogik.dialogRaumauswahlOeffnen();
-                    getScene().getWindow().hide();
-                }
-                case FEHLER -> Meldungen.zeigeInformation("Login-Daten fehlerhaft", "Die Logindaten sind falsch.");
-                case VERBINDUNG_ABGEBROCHEN ->
-                        Meldungen.zeigeInformation("Server nicht gefunden", "Unter der angegebenen IP-Adresse konnte kein Server gefunden werden.");
-            }
-        });
+        anmeldenButton.addEventHandler(ActionEvent.ACTION, e -> anmelden(passwordField.getText()));
 
         AnchorPane.setLeftAnchor(serverTextField, 10.0);
         AnchorPane.setTopAnchor(serverTextField, 10.0);
@@ -60,10 +55,33 @@ public class DialogAnmelden extends AnchorPane {
         AnchorPane.setBottomAnchor(anmeldenButton, 10.0);
 
         getChildren().addAll(abbrechenButton, serverTextField, usernameTextField, passwordField, registrierenButton, anmeldenButton);
+
+        addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() != null) {
+                switch (e.getCode()) {
+                    case ENTER -> anmelden(passwordField.getText());
+                    case ESCAPE -> System.exit(0);
+                }
+            }
+        });
     }
 
-    public static DialogAnmelden dialogAnmeldenStart(QuerschnittLogik querschnittLogik) {
-        DialogAnmelden root = new DialogAnmelden(querschnittLogik);
+    private void anmelden(String pw) {
+        AllgemeinerReturnWert ret = ansichtImpl.getClientKomm().anmelden(serverTextField.getText(), usernameTextField.getText(), pw);
+        switch (ret) {
+            case ERFOLGREICH -> {
+                ansichtImpl.erfolgreichAngemeldet(usernameTextField.getText());
+                ansichtImpl.dialogRaumauswahlOeffnen();
+                getScene().getWindow().hide();
+            }
+            case FEHLER -> Meldungen.zeigeInformation("Login-Daten fehlerhaft", "Die Logindaten sind falsch.");
+            case VERBINDUNG_ABGEBROCHEN ->
+                    Meldungen.zeigeInformation("Server nicht gefunden", "Unter der angegebenen IP-Adresse konnte kein Server gefunden werden.");
+        }
+    }
+
+    public static DialogAnmelden dialogAnmeldenStart(AnsichtImpl ansichtImpl) {
+        DialogAnmelden root = new DialogAnmelden(ansichtImpl);
         Scene scene = new Scene(root, 300, 150);
         Stage stage = new Stage();
 
@@ -73,7 +91,9 @@ public class DialogAnmelden extends AnchorPane {
         return root;
     }
 
-    void anzeigen() {
+    void anzeigen(String ip, String name) {
+        if (ip != null) serverTextField.setText(ip);
+        if (name != null) usernameTextField.setText(name);
         ((Stage) getScene().getWindow()).show();
     }
 }

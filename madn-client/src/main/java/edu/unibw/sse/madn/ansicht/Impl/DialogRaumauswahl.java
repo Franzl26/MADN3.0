@@ -16,11 +16,11 @@ import javafx.stage.Stage;
 
 public class DialogRaumauswahl extends AnchorPane {
     private final ListView<HBox> roomsList;
-    private final QuerschnittLogik querschnittLogik;
+    private final AnsichtImpl ansichtImpl;
     private final GraphicsContext gcName;
 
-    public DialogRaumauswahl(QuerschnittLogik querschnittLogik) {
-        this.querschnittLogik = querschnittLogik;
+    public DialogRaumauswahl(AnsichtImpl ansichtImpl) {
+        this.ansichtImpl = ansichtImpl;
 
         Canvas nameCanvas = new Canvas(300, 40);
         gcName = nameCanvas.getGraphicsContext2D();
@@ -30,15 +30,15 @@ public class DialogRaumauswahl extends AnchorPane {
 
         Button newGameButton = new Button("Neuen Warteraum erstellen");
         newGameButton.addEventHandler(ActionEvent.ACTION, e -> {
-            querschnittLogik.setAktuellerWarteraum(-2);
-            AllgemeinerReturnWert ret = querschnittLogik.getClientKomm().warteraumErstellen();
+            ansichtImpl.setAktuellerWarteraum(-2);
+            AllgemeinerReturnWert ret = ansichtImpl.getClientKomm().warteraumErstellen();
             switch (ret) {
                 case FEHLER -> {
                     Meldungen.zeigeInformation("Maximale Raumanzahl bereits erreicht", "Die maximale Anzahl an Warteräumen ist erreicht, es kann kein neuer erstellt werden.");
-                    querschnittLogik.setAktuellerWarteraum(-1);
+                    ansichtImpl.setAktuellerWarteraum(-1);
                 }
                 case ERFOLGREICH -> {
-                    querschnittLogik.dialogWarteraumOeffnen();
+                    ansichtImpl.dialogWarteraumOeffnen();
                     getScene().getWindow().hide();
                 }
                 case VERBINDUNG_ABGEBROCHEN -> {
@@ -70,13 +70,13 @@ public class DialogRaumauswahl extends AnchorPane {
             GraphicsContext gc = canvas.getGraphicsContext2D();
             Button button = new Button("Beitreten");
             button.addEventHandler(ActionEvent.ACTION, e -> {
-                AllgemeinerReturnWert ret = querschnittLogik.getClientKomm().warteraumBeitreten(r.id());
+                AllgemeinerReturnWert ret = ansichtImpl.getClientKomm().warteraumBeitreten(r.id());
                 switch (ret) {
                     case FEHLER ->
                             Meldungen.zeigeInformation("Warteraum ist voll", "Der Warteraum ist bereits voll, du kannst diesem leider nicht beitreten");
                     case ERFOLGREICH -> {
-                        querschnittLogik.setAktuellerWarteraum(r.id());
-                        querschnittLogik.dialogWarteraumOeffnen();
+                        ansichtImpl.setAktuellerWarteraum(r.id());
+                        ansichtImpl.dialogWarteraumOeffnen();
                         getScene().getWindow().hide();
                     }
                     case VERBINDUNG_ABGEBROCHEN -> {
@@ -112,13 +112,13 @@ public class DialogRaumauswahl extends AnchorPane {
 
     private void beenden() {
         if (Meldungen.frageBestaetigung("Spiel beenden", "Willst du das Spiel wirklich beenden?")) {
-            querschnittLogik.getClientKomm().abmelden();
+            ansichtImpl.getClientKomm().abmelden();
             System.exit(0);
         }
     }
 
-    public static DialogRaumauswahl dialogRaumauswahlStart(QuerschnittLogik querschnittLogik) {
-        DialogRaumauswahl root = new DialogRaumauswahl(querschnittLogik);
+    public static DialogRaumauswahl dialogRaumauswahlStart(AnsichtImpl ansichtImpl) {
+        DialogRaumauswahl root = new DialogRaumauswahl(ansichtImpl);
         Scene scene = new Scene(root, 820, 500);
         Stage stage = new Stage();
 

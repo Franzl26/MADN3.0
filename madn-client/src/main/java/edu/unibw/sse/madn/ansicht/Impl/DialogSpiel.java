@@ -33,17 +33,17 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     private final GraphicsContext gcName;
     private final Canvas gifCanvas;
     private final MediaView gifView;
-    private final QuerschnittLogik querschnittLogik;
+    private final AnsichtImpl ansichtImpl;
     private final FigurZiehen figurZiehen = new FigurZiehen();
     private FeldBesetztStatus[] brettStatus = new FeldBesetztStatus[72];
     private String[] namen = new String[0];
     private int aktiverSpieler = 0;
 
-    public DialogSpiel(QuerschnittLogik querschnittLogik, SpielfeldKonfigurationIntern config) {
-        this.querschnittLogik = querschnittLogik;
+    public DialogSpiel(AnsichtImpl ansichtImpl, SpielfeldKonfigurationIntern config) {
+        this.ansichtImpl = ansichtImpl;
         this.config = config;
 
-        querschnittLogik.getClientKomm().spielUpdaterSetzen(this);
+        ansichtImpl.getClientKomm().spielUpdaterSetzen(this);
         Arrays.fill(brettStatus, FELD_LEER);
 
         setBackground(Background.fill(Color.LIGHTSLATEGRAY));
@@ -53,7 +53,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         Canvas diceCanvas = new Canvas(100, 100);
         gcDice = diceCanvas.getGraphicsContext2D();
         diceCanvas.setOnMouseClicked(e -> {
-            WuerfelnRueckgabe ret = querschnittLogik.getClientKomm().wuerfeln();
+            WuerfelnRueckgabe ret = ansichtImpl.getClientKomm().wuerfeln();
             switch (ret) {
                 case NICHT_DRAN -> Meldungen.zeigeInformation("Nicht am Zug", "Warte mit würfeln bis du am Zug bist!");
                 case FALSCHE_PHASE ->
@@ -143,7 +143,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
 
     private void showGif() {
         gifView.toFront();
-        Media media = querschnittLogik.zufaelligesGif();
+        Media media = ansichtImpl.zufaelligesGif();
         MediaPlayer player = new MediaPlayer(media);
         gifView.setMediaPlayer(player);
         player.setAutoPlay(true);
@@ -156,12 +156,12 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
 
     private void spielVerlassen() {
         if (Meldungen.frageBestaetigung("Willst du dass Spiel wirklich verlassen?", "Ein Wiedereinstieg in das laufende Spiel ist nicht möglich!")) {
-            Spielstatistik statistik = querschnittLogik.getClientKomm().spielVerlassen();
+            Spielstatistik statistik = ansichtImpl.getClientKomm().spielVerlassen();
             if (statistik == null) {
                 Meldungen.kommunikationAbgebrochen();
                 System.exit(-1);
             }
-            querschnittLogik.dialogSpielstatistikOeffnen(statistik);
+            ansichtImpl.dialogSpielstatistikOeffnen(statistik);
             getScene().getWindow().hide();
         }
     }
@@ -173,8 +173,8 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         });
     }
 
-    public static DialogSpiel dialogSpielStart(QuerschnittLogik querschnittLogik, SpielfeldKonfigurationIntern config) {
-        DialogSpiel root = new DialogSpiel(querschnittLogik, config);
+    public static DialogSpiel dialogSpielStart(AnsichtImpl ansichtImpl, SpielfeldKonfigurationIntern config) {
+        DialogSpiel root = new DialogSpiel(ansichtImpl, config);
         Scene scene = new Scene(root, 1000, 600);
         Stage stage = new Stage();
 
@@ -235,7 +235,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     @Override
     public void spielVorbei(Spielstatistik statistik) {
         Platform.runLater(() -> {
-            querschnittLogik.dialogSpielstatistikOeffnen(statistik);
+            ansichtImpl.dialogSpielstatistikOeffnen(statistik);
             getScene().getWindow().hide();
         });
     }
@@ -261,7 +261,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
                             drawBoardSingleFieldIntern(brettStatus[i], i, false);
                         } else {
                             drawBoardSingleFieldIntern(brettStatus[highlightedField], highlightedField, false);
-                            ZiehenRueckgabe ret = querschnittLogik.getClientKomm().figurZiehen(highlightedField, i);
+                            ZiehenRueckgabe ret = ansichtImpl.getClientKomm().figurZiehen(highlightedField, i);
                             switch (ret) {
                                 case BESTRAFT ->
                                         Meldungen.zeigeInformation("Priorität missachtet", "Spielzugpriorität wurde nicht eingehalten!\nAbrücken oder Schlagen nicht beachtet.\nDeine Figur wird auf die Startposition zurückgesetzt!");

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 
-public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
+public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
     private DatenClient datenClient;
     private ClientKomm clientKomm;
     private String benutzername = "";
@@ -52,7 +52,7 @@ public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
     @Override
     public void anwendungStarten() {
         dialogAnmelden = DialogAnmelden.dialogAnmeldenStart(this);
-        dialogAnmelden.anzeigen();
+        dialogAnmelden.anzeigen(null, null);
     }
 
     private final HashMap<String, SpielfeldKonfigurationIntern> designs = new HashMap<>();
@@ -102,15 +102,15 @@ public class QuerschnittLogik implements Ansicht, RaumverwaltungUpdaten {
     private DialogSpiel dialogSpiel;
     private DialogWarteraum dialogWarteraum;
 
-    void dialogRegistrierenOeffnen() {
+    void dialogRegistrierenOeffnen(String ip, String name) {
         if (dialogRegistrieren == null) {
             dialogRegistrieren = DialogRegistrieren.dialogRegistrierenStart(this);
         }
-        dialogRegistrieren.anzeigen();
+        dialogRegistrieren.anzeigen(ip, name);
     }
 
-    void dialogAnmeldenOeffnen() {
-        dialogAnmelden.anzeigen();
+    void dialogAnmeldenOeffnen(String ip, String name) {
+        dialogAnmelden.anzeigen(ip, name);
     }
 
     void erfolgreichAngemeldet(String benutzername) {

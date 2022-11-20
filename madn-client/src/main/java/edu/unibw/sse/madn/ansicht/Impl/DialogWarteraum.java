@@ -13,10 +13,10 @@ import javafx.stage.Stage;
 
 public class DialogWarteraum extends AnchorPane {
     private final GraphicsContext gcName;
-    private final QuerschnittLogik querschnittLogik;
+    private final AnsichtImpl ansichtImpl;
 
-    public DialogWarteraum(QuerschnittLogik querschnittLogik) {
-        this.querschnittLogik = querschnittLogik;
+    public DialogWarteraum(AnsichtImpl ansichtImpl) {
+        this.ansichtImpl = ansichtImpl;
 
         Canvas nameCanvas = new Canvas(200, 150);
         gcName = nameCanvas.getGraphicsContext2D();
@@ -24,7 +24,7 @@ public class DialogWarteraum extends AnchorPane {
         Button botAddButton = new Button("Bot hinzufügen");
         botAddButton.setPrefWidth(100);
         botAddButton.addEventHandler(ActionEvent.ACTION, e -> {
-            AllgemeinerReturnWert ret = querschnittLogik.getClientKomm().botHinzufuegen();
+            AllgemeinerReturnWert ret = ansichtImpl.getClientKomm().botHinzufuegen();
             switch (ret) {
                 case ERFOLGREICH -> {
                 }
@@ -39,7 +39,7 @@ public class DialogWarteraum extends AnchorPane {
         Button botRemoveButton = new Button("Bot entfernen");
         botRemoveButton.setPrefWidth(100);
         botRemoveButton.addEventHandler(ActionEvent.ACTION, e -> {
-            AllgemeinerReturnWert ret = querschnittLogik.getClientKomm().botEntfernen();
+            AllgemeinerReturnWert ret = ansichtImpl.getClientKomm().botEntfernen();
             switch (ret) {
                 case ERFOLGREICH -> {
                 }
@@ -53,14 +53,14 @@ public class DialogWarteraum extends AnchorPane {
         });
         Button designButton = new Button("Spieldesign auswählen");
         designButton.setPrefWidth(140);
-        designButton.addEventHandler(ActionEvent.ACTION, e -> querschnittLogik.dialogDesignauswahlOeffnen());
+        designButton.addEventHandler(ActionEvent.ACTION, e -> ansichtImpl.dialogDesignauswahlOeffnen());
         Button startButton = new Button("Spiel starten");
         startButton.setPrefWidth(140);
         startButton.addEventHandler(ActionEvent.ACTION, e -> {
-            AllgemeinerReturnWert ret = querschnittLogik.getClientKomm().spielStarten();
+            AllgemeinerReturnWert ret = ansichtImpl.getClientKomm().spielStarten();
             switch (ret) {
                 case ERFOLGREICH -> {
-                    querschnittLogik.dialogSpielOeffnen();
+                    ansichtImpl.dialogSpielOeffnen();
                     getScene().getWindow().hide();
                 }
                 case FEHLER ->
@@ -100,9 +100,9 @@ public class DialogWarteraum extends AnchorPane {
 
     private void verlassen() {
         if (Meldungen.frageBestaetigung("Warteraum verlassen", "Willst du den Warteraum wirklich verlassen und zur Raumauswahl zurückkehren?")) {
-            querschnittLogik.getClientKomm().warteraumVerlassen();
-            querschnittLogik.setAktuellerWarteraum(-1);
-            querschnittLogik.dialogRaumauswahlOeffnen();
+            ansichtImpl.getClientKomm().warteraumVerlassen();
+            ansichtImpl.setAktuellerWarteraum(-1);
+            ansichtImpl.dialogRaumauswahlOeffnen();
             getScene().getWindow().hide();
         }
     }
@@ -117,8 +117,8 @@ public class DialogWarteraum extends AnchorPane {
         }
     }
 
-    public static DialogWarteraum dialogWarteraumStart(QuerschnittLogik querschnittLogik) {
-        DialogWarteraum root = new DialogWarteraum(querschnittLogik);
+    public static DialogWarteraum dialogWarteraumStart(AnsichtImpl ansichtImpl) {
+        DialogWarteraum root = new DialogWarteraum(ansichtImpl);
         Scene scene = new Scene(root, 400, 200);
         Stage stage = new Stage();
 

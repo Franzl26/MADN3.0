@@ -18,7 +18,7 @@ public class DialogDesignauswahl extends AnchorPane {
     private boolean last = false;
     private final ChoiceBox<String> boardChoice;
 
-    public DialogDesignauswahl(QuerschnittLogik querschnittLogik) {
+    public DialogDesignauswahl(AnsichtImpl ansichtImpl) {
 
         setBackground(Background.fill(Color.LIGHTSLATEGRAY));
         Canvas boardCanvas = new Canvas(500, 500);
@@ -41,7 +41,7 @@ public class DialogDesignauswahl extends AnchorPane {
                 return;
             }
             last = true;
-            SpielfeldKonfigurationIntern config = querschnittLogik.spielfeldKonfigurationLaden(boardChoice.getValue());
+            SpielfeldKonfigurationIntern config = ansichtImpl.spielfeldKonfigurationLaden(boardChoice.getValue());
             FeldBesetztStatus[] state = new FeldBesetztStatus[72];
             Arrays.fill(state, 0, 4, FeldBesetztStatus.FELD_SPIELER1);
             Arrays.fill(state, 4, 8, FeldBesetztStatus.FELD_SPIELER2);
@@ -60,7 +60,7 @@ public class DialogDesignauswahl extends AnchorPane {
         Button selectButton = new Button("Auswählen");
         selectButton.setPrefWidth(80);
         selectButton.addEventHandler(ActionEvent.ACTION, e -> {
-            querschnittLogik.setAusgewaehltesDesign(boardChoice.getValue());
+            ansichtImpl.setAusgewaehltesDesign(boardChoice.getValue());
             getScene().getWindow().hide();
         });
 
@@ -96,8 +96,8 @@ public class DialogDesignauswahl extends AnchorPane {
         }
     }
 
-    public static DialogDesignauswahl dialogDesignauswahlStart(QuerschnittLogik querschnittLogik) {
-        DialogDesignauswahl root = new DialogDesignauswahl(querschnittLogik);
+    public static DialogDesignauswahl dialogDesignauswahlStart(AnsichtImpl ansichtImpl) {
+        DialogDesignauswahl root = new DialogDesignauswahl(ansichtImpl);
         Scene scene = new Scene(root, 700, 520);
         Stage stage = new Stage();
 
