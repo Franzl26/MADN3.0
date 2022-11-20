@@ -101,6 +101,7 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
     private DialogRegistrieren dialogRegistrieren;
     private DialogSpiel dialogSpiel;
     private DialogWarteraum dialogWarteraum;
+    private DialogChat dialogChat;
 
     void dialogRegistrierenOeffnen(String ip, String name) {
         if (dialogRegistrieren == null) {
@@ -127,6 +128,10 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
         }
         dialogRaumauswahl.namenSetzen(benutzername);
         dialogRaumauswahl.anzeigen();
+        if (dialogChat != null) {
+            dialogChat.verstecken();
+            dialogChat.chatLoeschen();
+        }
     }
 
     void dialogDesignauswahlOeffnen() {
@@ -153,6 +158,10 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
     }
 
     void dialogSpielstatistikOeffnen(Spielstatistik spielstatistik) {
+        if (dialogChat != null) {
+            dialogChat.verstecken();
+            dialogChat.chatLoeschen();
+        }
         DialogSpielstatistik.dialogSpielstatistikStart(this, spielstatistik);
     }
 
@@ -162,6 +171,10 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
         }
         String[] namen = namenAktuellerRaum();
         if (namen != null) dialogWarteraum.drawNames(namen);
+        if (dialogChat == null) {
+            dialogChat = DialogChat.dialogChatStart(this);
+        }
+        dialogChat.anzeigen();
         dialogWarteraum.anzeigen();
     }
 
@@ -175,6 +188,13 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
             dialogRaumauswahl.displayRooms(warteraeume);
             String[] namen = namenAktuellerRaum();
             if (namen != null) dialogWarteraum.drawNames(namen);
+        });
+    }
+
+    @Override
+    public void nachrichtSenden(String nachricht) {
+        Platform.runLater(() -> {
+            if (dialogChat != null) dialogChat.nachrichtHinzufuegen(nachricht);
         });
     }
 

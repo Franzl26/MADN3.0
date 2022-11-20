@@ -188,6 +188,15 @@ public class ClientKommImpl implements ClientKomm, ClientKommunikation {
         clientCallback.spiel = update;
     }
 
+    @Override
+    public AllgemeinerReturnWert nachrichtSenden(String nachricht) {
+        try {
+            return sitzung.nachrichtSenden(nachricht) ? ERFOLGREICH : FEHLER;
+        } catch (RemoteException e) {
+            return VERBINDUNG_ABGEBROCHEN;
+        }
+    }
+
     private byte[] passwortVerschluesseln(String passwort, PublicKey key) {
         byte[] chiffrat;
         try {
@@ -214,4 +223,6 @@ public class ClientKommImpl implements ClientKomm, ClientKommunikation {
     public ClientKomm clientKommunikationHolen() {
         return this;
     }
+
+
 }

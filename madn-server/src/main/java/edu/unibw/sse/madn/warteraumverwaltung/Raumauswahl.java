@@ -80,5 +80,14 @@ public interface Raumauswahl {
      */
     boolean spielStarten(String benutzername);
 
+    /**
+     * Sendet eine Nachricht im Chat in Warteraum
+     *
+     * @param benutzername Benutzername des Clients, der Nachricht gesendet hat
+     * @param nachricht Nachricht die gesendet werden soll
+     * @return true: erfolgreich, sonst false
+     */
+    boolean nachrichtSenden(String benutzername,String nachricht);
+
     void anClientSendenRaumauswahlSetzen(AnClientSendenRaumauswahl anClientSendenRaumauswahl);
 }

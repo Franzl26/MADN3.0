@@ -73,4 +73,11 @@ public interface ClientCallback extends Remote {
      * @param statistik Spielstatistik
      */
     void spielVorbei(Spielstatistik statistik) throws RemoteException;
+
+    /**
+     * Sendet eine Nachricht im Chat in Warteraum an Client
+     *
+     * @param nachricht Nachricht die gesendet werden soll
+     */
+    void nachrichtSenden(String nachricht) throws RemoteException;
 }

@@ -32,24 +32,24 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
     }
 
     @Override
-    public synchronized boolean warteraumErstellen(String sitzung) {
+    public synchronized boolean warteraumErstellen(String benutzername) {
         if (raumAnzahl >= MAX_RAEUME) return false;
         WarteraumImpl neuerRaum = new WarteraumImpl();
-        neuerRaum.spielerHinzufuegen(sitzung, sitzung);
+        neuerRaum.spielerHinzufuegen(benutzername, benutzername);
         idZuRaum.put(neuerRaum.id(), neuerRaum);
-        istInRaum.put(sitzung, neuerRaum.id());
+        istInRaum.put(benutzername, neuerRaum.id());
         raumAnzahl++;
         updateClients();
         return true;
     }
 
     @Override
-    public synchronized boolean warteraumBeitreten(String sitzung, long raumId) {
+    public synchronized boolean warteraumBeitreten(String benutzername, long raumId) {
         WarteraumImpl raum = idZuRaum.get(raumId);
         if (raum == null) return false;
         if (raum.anzahlSpieler() + raum.botAnzahl() >= 4) return false;
-        raum.spielerHinzufuegen(sitzung, sitzung);
-        istInRaum.put(sitzung, raum.id());
+        raum.spielerHinzufuegen(benutzername, benutzername);
+        istInRaum.put(benutzername, raum.id());
         updateClients();
         return true;
     }
@@ -57,22 +57,22 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
 
     // in Warteraum
     @Override
-    public synchronized void warteraumVerlassen(String sitzung) {
-        Long id = istInRaum.get(sitzung);
+    public synchronized void warteraumVerlassen(String benutzername) {
+        Long id = istInRaum.get(benutzername);
         if (id == null) return;
         WarteraumImpl raum = idZuRaum.get(id);
-        raum.spielerEntfernen(sitzung, sitzung);
+        raum.spielerEntfernen(benutzername, benutzername);
         if (raum.anzahlSpieler() <= 0) {
             idZuRaum.remove(id);
             raumAnzahl--;
         }
-        istInRaum.remove(sitzung);
+        istInRaum.remove(benutzername);
         updateClients();
     }
 
     @Override
-    public synchronized boolean botHinzufuegen(String sitzung) {
-        Long id = istInRaum.get(sitzung);
+    public synchronized boolean botHinzufuegen(String benutzername) {
+        Long id = istInRaum.get(benutzername);
         if (id == null) return false;
         WarteraumImpl raum = idZuRaum.get(id);
         if (raum.anzahlSpieler() + raum.botAnzahl() >= 4) return false;
@@ -82,8 +82,8 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
     }
 
     @Override
-    public synchronized boolean botEntfernen(String sitzung) {
-        Long id = istInRaum.get(sitzung);
+    public synchronized boolean botEntfernen(String benutzername) {
+        Long id = istInRaum.get(benutzername);
         if (id == null) return false;
         WarteraumImpl raum = idZuRaum.get(id);
         if (raum.botAnzahl() <= 0) return false;
@@ -93,8 +93,8 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
     }
 
     @Override
-    public synchronized boolean spielStarten(String sitzung) {
-        Long id = istInRaum.get(sitzung);
+    public synchronized boolean spielStarten(String benutzername) {
+        Long id = istInRaum.get(benutzername);
         if (id == null) return false;
         WarteraumImpl raum = idZuRaum.get(id);
         if (raum.anzahlSpieler() + raum.botAnzahl() <= 1) return false;
@@ -106,6 +106,11 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
     }
 
     @Override
+    public boolean nachrichtSenden(String benutzername, String nachricht) {
+        return nachrichtSendenIntern(benutzername, nachricht);
+    }
+
+    @Override
     public void anClientSendenRaumauswahlSetzen(AnClientSendenRaumauswahl anClientSendenRaumauswahl) {
         anClient = anClientSendenRaumauswahl;
     }
@@ -113,6 +118,15 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
     @Override
     public synchronized void spielBeendet() {
         raumAnzahl--;
+    }
+
+    private synchronized boolean nachrichtSendenIntern(String benutzername, String nachricht) {
+        Long id = istInRaum.get(benutzername);
+        if (id == null) return false;
+        WarteraumImpl raum = idZuRaum.get(id);
+        if (raum == null) return false;
+        anClient.nachrichtSenden(raum.clients(), benutzername + ": " + nachricht);
+        return true;
     }
 
     private void updateClients() {

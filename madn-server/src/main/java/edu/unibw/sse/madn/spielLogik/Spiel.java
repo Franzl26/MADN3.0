@@ -55,5 +55,14 @@ public interface Spiel { // Markus
      */
     Spielstatistik spielVerlassen(String benutzername);
 
+    /**
+     * Sendet eine Nachricht im Chat in Spiel
+     *
+     * @param benutzername Benutzername des Clients, der Nachricht gesendet hat
+     * @param nachricht Nachricht die gesendet werden soll
+     * @return true: erfolgreich, sonst false
+     */
+    boolean nachrichtSenden(String benutzername,String nachricht);
+
     void anClientSendenSpielSetzen(AnClientSendenSpiel anClientSendenSpiel);
 }

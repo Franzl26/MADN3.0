@@ -103,4 +103,12 @@ public interface Sitzung extends Remote {
      * @return Client Callback der Session
      */
     ClientCallback clientCallback() throws RemoteException;
+
+    /**
+     * Sendet eine Nachricht im Chat in Warteraum/Spiel
+     *
+     * @param nachricht Nachricht die gesendet werden soll
+     * @return true: erfolgreich, sonst false
+     */
+    boolean nachrichtSenden(String nachricht) throws RemoteException;
 }

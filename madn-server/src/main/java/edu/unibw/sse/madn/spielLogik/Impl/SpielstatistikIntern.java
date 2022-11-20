@@ -2,6 +2,8 @@ package edu.unibw.sse.madn.spielLogik.Impl;
 
 import edu.unibw.sse.madn.base.Spielstatistik;
 
+import java.util.Arrays;
+
 public class SpielstatistikIntern {
     private String[] names;
     private final int[][] zahlenGewuerfelt;
@@ -22,7 +24,7 @@ public class SpielstatistikIntern {
     }
 
     void namenSetzen(String[] names) {
-        this.names = names;
+        this.names = names.clone();
     }
 
     void incZahlGewuerfelt(int spieler, int zahl) {

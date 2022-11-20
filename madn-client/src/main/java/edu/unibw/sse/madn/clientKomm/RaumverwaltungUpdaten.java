@@ -12,4 +12,11 @@ public interface RaumverwaltungUpdaten {
      * @param warteraeume Array aller Warteräume
      */
     void raeumeUpdaten(Warteraum[] warteraeume);
+
+    /**
+     * Sendet eine Nachricht im Chat in Warteraum an Client
+     *
+     * @param nachricht Nachricht die gesendet werden soll
+     */
+    void nachrichtSenden(String nachricht);
 }

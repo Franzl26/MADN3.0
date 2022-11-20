@@ -208,6 +208,8 @@ public class SpielObjekt {
     }
 
     private synchronized WuerfelnRueckgabe throwDiceIntern() {
+        if (aktiverSpieler == -1) return WuerfelnRueckgabe.KEIN_ZUG_MOEGLICH;
+
         timerWuerfeln.cancel();
         if (zahlGewuerfelt > 0) {
             if (getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt)[0] != -1)
@@ -356,11 +358,10 @@ public class SpielObjekt {
             if (clients[j] != null) break;
             if (j == spielerAnzahl - 1) {
                 beenden();
-                break;
+                return spielStatistik.holeZumSenden();
             }
         }
         Spielstatistik spielStatistik1 = spielStatistik.holeZumSenden();
-        //System.out.println("Spiel verlassen: " + namenHolen(sitzung));
         spielStatistik.namenSetzen(namen);
         neueNamenSendenAlle(namen);
         return spielStatistik1;
@@ -499,6 +500,10 @@ public class SpielObjekt {
                 anClient.ziehenVorbei(clients[spieler]);
             }
         }
+    }
+
+    String[] getClients() {
+        return clients;
     }
 
     private class Waiting extends TimerTask {

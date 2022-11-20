@@ -65,4 +65,12 @@ public interface AnClientSendenSpiel {
      * @param statistik    Spielstatistik
      */
     void spielVorbei(String[] benutzername, Spielstatistik statistik);
+
+    /**
+     * Sendet eine Nachricht im Chat in Warteraum an Client
+     *
+     * @param benutzernamen Benutzernamen der Clients, an die die Nachricht gesendet werden soll
+     * @param nachricht Nachricht die gesendet werden soll
+     */
+    void nachrichtSenden(String[] benutzernamen, String nachricht);
 }

@@ -142,4 +142,12 @@ public interface ClientKomm {
      * @param update UpdateInterface
      */
     void spielUpdaterSetzen(SpielUpdaten update);
+
+    /**
+     * Sendet eine Nachricht im Chat in Warteraum/Spiel
+     *
+     * @param nachricht Nachricht die gesendet werden soll
+     * @return AllgemeinerReturnWert
+     */
+    AllgemeinerReturnWert nachrichtSenden(String nachricht);
 }

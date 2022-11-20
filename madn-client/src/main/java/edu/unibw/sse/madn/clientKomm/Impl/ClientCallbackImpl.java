@@ -69,4 +69,9 @@ public class ClientCallbackImpl extends UnicastRemoteObject implements ClientCal
         if (spiel == null) return;
         spiel.spielVorbei(statistik);
     }
+
+    @Override
+    public void nachrichtSenden(String nachricht) throws RemoteException {
+        raumverwaltung.nachrichtSenden(nachricht);
+    }
 }

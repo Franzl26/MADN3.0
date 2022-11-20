@@ -4,6 +4,7 @@ import edu.unibw.sse.madn.base.Spielstatistik;
 import edu.unibw.sse.madn.base.WuerfelnRueckgabe;
 import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 import edu.unibw.sse.madn.spielLogik.*;
+import edu.unibw.sse.madn.warteraumverwaltung.Impl.WarteraumImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +53,18 @@ public class SpielLogikImpl implements Spiel, SpielErstellen, SpielLogik {
         SpielObjekt spiel = istInSpiel.get(sitzung);
         if (spiel == null) return null;
         return spiel.leaveGame(sitzung);
+    }
+
+    @Override
+    public boolean nachrichtSenden(String benutzername, String nachricht) {
+        return nachrichtSendenIntern(benutzername, nachricht);
+    }
+
+    private synchronized boolean nachrichtSendenIntern(String benutzername, String nachricht) {
+        SpielObjekt spiel = istInSpiel.get(benutzername);
+        if (spiel == null) return false;
+        anClient.nachrichtSenden(spiel.getClients(), benutzername + ": " + nachricht);
+        return true;
     }
 
     @Override

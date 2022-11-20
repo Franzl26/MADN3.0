@@ -102,6 +102,21 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
     }
 
     @Override
+    public void nachrichtSenden(String[] benutzernamen, String nachricht) {
+        for (String s : benutzernamen) {
+            if (s == null) continue;
+            new Thread(() -> {
+                Sitzung benutzer = serverKommunikation.benutzerHolen(s);
+                try {
+                    benutzer.clientCallback().nachrichtSenden(nachricht);
+                } catch (RemoteException e) {
+                    serverKommunikation.benutzerAbmelden(s);
+                }
+            }).start();
+        }
+    }
+
+    @Override
     public void raeumeUpdaten(Warteraum[] warteraeume) {
         for (Sitzung s : serverKommunikation.alleBenutzerHolen()) {
             new Thread(() -> {

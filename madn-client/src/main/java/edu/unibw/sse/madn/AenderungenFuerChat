@@ -1,0 +1,28 @@
+Methode "nachrichtSenden" hinzugefügt in Interfaces:
+    ClientKomm
+    Sitzung
+    Spiel
+    Raumauswahl
+    AnClientSendenRaumauswahl
+    AnClientSendenSpiel
+    ClientCallback
+    Raumverwaltung Updaten
+
+Methode "getClient" in Spielobjekt hinzugefügt
+
+Methode "nachrichtSenden" implementiert in:
+    ClientKommImpl
+    ClientCallbackImpl
+    SitzungImpl
+    WarteraumverwaltungImpl mit "nachrichtSendenIntern"
+    SpielLogikImpl mit "nachrichtSendenIntern"
+    AnsichtImpl
+    AnClientSendenImpl
+
+DialogChat hinzugefügt
+
+in AnsichtImpl:
+    "dialogWarteraumOeffnen"
+    "dialogRaumauswahlOeffnen"
+    "dialogSpielstatistikOeffnen"
+    editiert

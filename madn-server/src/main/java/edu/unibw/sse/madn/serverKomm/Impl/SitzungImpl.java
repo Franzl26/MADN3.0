@@ -99,4 +99,13 @@ public class SitzungImpl extends UnicastRemoteObject implements Sitzung {
     public ClientCallback clientCallback() {
         return clientCallback;
     }
+
+    @Override
+    public boolean nachrichtSenden(String nachricht) throws RemoteException {
+        boolean ret = raumauswahl.nachrichtSenden(benutzername, nachricht);
+        if (!ret) {
+            ret = spiel.nachrichtSenden(benutzername, nachricht);
+        }
+        return ret;
+    }
 }
