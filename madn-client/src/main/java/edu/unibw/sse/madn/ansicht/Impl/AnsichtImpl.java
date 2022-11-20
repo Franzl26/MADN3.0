@@ -34,7 +34,7 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
     @Override
     public void dateizugriffClientSetzen(DatenClient datenClient) {
         this.datenClient = datenClient;
-        SpielfeldKonfiguration config = datenClient.konfigurationLaden("Standard");
+        SpielfeldKonfiguration config = datenClient.konfigurationLaden("Standard", false);
         if (config == null) {
             Meldungen.zeigeInformation("Fehler beim Starten","Standarddesign konnte nicht geladen werden");
             System.exit(-1);
@@ -57,15 +57,12 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
 
     private final HashMap<String, SpielfeldKonfigurationIntern> designs = new HashMap<>();
 
-    /**
-     * @param design null: wie gespeichert, sonst wie Parameter
-     */
     SpielfeldKonfigurationIntern spielfeldKonfigurationLaden(String design) {
-        if (design == null) design = ausgewaehltesDesign;
+        design += sechser?"6":"";
         if (!designs.containsKey(design)) {
-            SpielfeldKonfiguration config = datenClient.konfigurationLaden(design);
+            SpielfeldKonfiguration config = datenClient.konfigurationLaden(design, sechser);
             if (config == null) {
-                config = clientKomm.spielfeldKonfigurationHolen(design);
+                config = clientKomm.spielfeldKonfigurationHolen(design, sechser);
                 if (config != null) {
                     datenClient.KonfigurationSpeichern(config, design);
                 } else {
@@ -179,6 +176,7 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
     }
 
     private Warteraum[] warteraeume;
+    private boolean sechser = false;
 
     @Override
     public void raeumeUpdaten(Warteraum[] warteraeumeUeb) {
@@ -187,7 +185,10 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
             if (aktuellerWarteraum == -2) setAktuellerWarteraumAusListDurchNamen();
             dialogRaumauswahl.displayRooms(warteraeume);
             String[] namen = namenAktuellerRaum();
-            if (namen != null) dialogWarteraum.drawNames(namen);
+            if (namen != null) {
+                dialogWarteraum.drawNames(namen);
+                sechser = namen.length == 3 || namen.length > 4;
+            }
         });
     }
 

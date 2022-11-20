@@ -28,8 +28,8 @@ public class DateizugriffClientImpl implements DatenClient, DateizugriffClient {
     }
 
     @Override
-    public SpielfeldKonfiguration konfigurationLaden(String name) {
-        return SpielfeldKonfigurationLadenSpeichern.loadBoardKonfiguration("./madn-client/src/main/resources/designs/" + name + "/");
+    public SpielfeldKonfiguration konfigurationLaden(String name, boolean sechser) {
+        return SpielfeldKonfigurationLadenSpeichern.loadBoardKonfiguration("./madn-client/src/main/resources/designs/" + name + (sechser?"6":"") + "/", sechser);
     }
 
     @Override

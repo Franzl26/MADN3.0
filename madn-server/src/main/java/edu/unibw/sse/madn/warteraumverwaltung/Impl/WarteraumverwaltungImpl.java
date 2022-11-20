@@ -47,7 +47,7 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
     public synchronized boolean warteraumBeitreten(String benutzername, long raumId) {
         WarteraumImpl raum = idZuRaum.get(raumId);
         if (raum == null) return false;
-        if (raum.anzahlSpieler() + raum.botAnzahl() >= 4) return false;
+        if (raum.anzahlSpieler() + raum.botAnzahl() >= 6) return false;
         raum.spielerHinzufuegen(benutzername, benutzername);
         istInRaum.put(benutzername, raum.id());
         updateClients();
@@ -75,7 +75,7 @@ public class WarteraumverwaltungImpl implements Raumauswahl, WarteraumCallback, 
         Long id = istInRaum.get(benutzername);
         if (id == null) return false;
         WarteraumImpl raum = idZuRaum.get(id);
-        if (raum.anzahlSpieler() + raum.botAnzahl() >= 4) return false;
+        if (raum.anzahlSpieler() + raum.botAnzahl() >= 6) return false;
         raum.botHinzufuegen();
         updateClients();
         return true;

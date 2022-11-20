@@ -7,16 +7,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SpielfeldKonfigurationLadenSpeichern {
-    public static SpielfeldKonfiguration loadBoardKonfiguration(String dir) {
+    public static SpielfeldKonfiguration loadBoardKonfiguration(String dir, boolean sechser) {
+        System.out.println(sechser);
         if (!dir.endsWith("/")) dir = dir.concat("/");
         File f = new File(dir);
         if (!f.isDirectory()) return null;
-        Builder builder = new Builder();
+        Builder builder = new Builder(sechser);
         if (!builder.read(f)) return null;
         return builder.build();
     }
 
     private static class Builder {
+        private final boolean sechser;
         private final int[][] pointCoordinates;
         private final int[][] orientation;
         private byte[] board;
@@ -27,26 +29,29 @@ public class SpielfeldKonfigurationLadenSpeichern {
         private byte[][] figure;
         private byte[][] figureHigh;
 
-        private Builder() {
+        private Builder(boolean sechser) {
+            this.sechser = sechser;
             dice = new byte[7][];
-            path = new byte[4][];
-            personal = new byte[4][];
-            figure = new byte[4][];
-            figureHigh = new byte[4][];
-            pointCoordinates = new int[72][2];
-            orientation = new int[72][2];
+            int anzahl = sechser ? 6 : 4;
+            path = new byte[anzahl][];
+            personal = new byte[anzahl][];
+            figure = new byte[anzahl][];
+            figureHigh = new byte[anzahl][];
+            pointCoordinates = new int[sechser ? 96 : 72][2];
+            orientation = new int[sechser ? 96 : 72][2];
         }
 
         private boolean read(File f) {
             try {
+                int anzahl = sechser ? 6 : 4;
                 // Bilder einlesen
                 board = readFile(f.getAbsolutePath() + "/board.png");
                 pathNormal = readFile(f.getAbsolutePath() + "/pathNormal.png");
                 dice = readFiles(f.getAbsolutePath(), "/dice", 7);
-                path = readFiles(f.getAbsolutePath(), "/path", 4);
-                personal = readFiles(f.getAbsolutePath(), "/personal", 4);
-                figure = readFiles(f.getAbsolutePath(), "/figure", 4);
-                figureHigh = readFiles(f.getAbsolutePath(), "/figureHigh", 4);
+                path = readFiles(f.getAbsolutePath(), "/path", anzahl);
+                personal = readFiles(f.getAbsolutePath(), "/personal", anzahl);
+                figure = readFiles(f.getAbsolutePath(), "/figure", anzahl);
+                figureHigh = readFiles(f.getAbsolutePath(), "/figureHigh", anzahl);
 
                 // Koordinaten einlesen
                 File positions = new File(f.getAbsolutePath() + "/positions.txt");
@@ -73,19 +78,20 @@ public class SpielfeldKonfigurationLadenSpeichern {
                         }
                         in = buf.readLine();
                     }
-
+                    if (count != (sechser ? 96 : 72)) return false;
                 } catch (IOException e) {
-                    //e.printStackTrace(System.out);
+                    e.printStackTrace(System.out);
                     return false;
                 }
             } catch (Exception e) {
+                e.printStackTrace(System.out);
                 return false;
             }
             return true;
         }
 
         private SpielfeldKonfiguration build() {
-            return new SpielfeldKonfiguration(pointCoordinates, orientation, board, pathNormal, dice, path, personal, figure, figureHigh);
+            return new SpielfeldKonfiguration(sechser, pointCoordinates, orientation, board, pathNormal, dice, path, personal, figure, figureHigh);
         }
 
         private static byte[][] readFiles(String dir, String name, int count) {
@@ -126,8 +132,9 @@ public class SpielfeldKonfigurationLadenSpeichern {
         // Position und Drehung speichern
         int[][] pos = config.position();
         int[][] rot = config.rotation();
+        int anzahl = pos.length;
         try (BufferedWriter buf = new BufferedWriter(new FileWriter(dir + "positions.txt"))) {
-            for (int i = 0; i < 72; i++) {
+            for (int i = 0; i < anzahl; i++) {
                 buf.write(pos[i][0] + " " + pos[i][1] + " " + rot[i][0] + " " + rot[i][1]);
             }
         } catch (IOException e) {

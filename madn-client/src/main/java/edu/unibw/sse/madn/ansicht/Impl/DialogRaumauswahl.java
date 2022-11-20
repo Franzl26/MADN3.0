@@ -88,7 +88,7 @@ public class DialogRaumauswahl extends AnchorPane {
 
             String[] players = r.namen();
             StringBuilder build = new StringBuilder();
-            build.append(players.length).append("/4    ");
+            build.append(players.length).append("/6    ");
             for (String player : players) {
                 build.append(player).append("  ");
             }

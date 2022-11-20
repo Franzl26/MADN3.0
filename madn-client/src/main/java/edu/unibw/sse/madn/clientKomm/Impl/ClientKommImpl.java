@@ -90,9 +90,9 @@ public class ClientKommImpl implements ClientKomm, ClientKommunikation {
     }
 
     @Override
-    public SpielfeldKonfiguration spielfeldKonfigurationHolen(String name) {
+    public SpielfeldKonfiguration spielfeldKonfigurationHolen(String name, boolean sechser) {
         try {
-            return sitzung.spielfeldKonfigurationHolen(name);
+            return sitzung.spielfeldKonfigurationHolen(name, sechser);
         } catch (RemoteException e) {
             return null;
         }

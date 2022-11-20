@@ -46,8 +46,8 @@ public class SitzungImpl extends UnicastRemoteObject implements Sitzung {
     }
 
     @Override
-    public SpielfeldKonfiguration spielfeldKonfigurationHolen(String name) throws RemoteException {
-        return spielDesign.spielfeldKonfigurationHolen(name);
+    public SpielfeldKonfiguration spielfeldKonfigurationHolen(String name, boolean sechser) throws RemoteException {
+        return spielDesign.spielfeldKonfigurationHolen(name, sechser);
     }
 
     @Override

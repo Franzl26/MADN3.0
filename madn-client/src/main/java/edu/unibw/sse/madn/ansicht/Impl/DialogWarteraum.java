@@ -18,7 +18,7 @@ public class DialogWarteraum extends AnchorPane {
     public DialogWarteraum(AnsichtImpl ansichtImpl) {
         this.ansichtImpl = ansichtImpl;
 
-        Canvas nameCanvas = new Canvas(200, 150);
+        Canvas nameCanvas = new Canvas(200, 210);
         gcName = nameCanvas.getGraphicsContext2D();
 
         Button botAddButton = new Button("Bot hinzufügen");
@@ -119,7 +119,7 @@ public class DialogWarteraum extends AnchorPane {
 
     public static DialogWarteraum dialogWarteraumStart(AnsichtImpl ansichtImpl) {
         DialogWarteraum root = new DialogWarteraum(ansichtImpl);
-        Scene scene = new Scene(root, 400, 200);
+        Scene scene = new Scene(root, 400, 260);
         Stage stage = new Stage();
 
         stage.setTitle("Warteraum");

@@ -48,7 +48,7 @@ public interface ClientKomm {
      * @param name Name des Designs
      * @return die geladene Spielfeld-Konfiguration oder null bei Fehler
      */
-    SpielfeldKonfiguration spielfeldKonfigurationHolen(String name);
+    SpielfeldKonfiguration spielfeldKonfigurationHolen(String name, boolean sechser);
 
 
     // Warteraum

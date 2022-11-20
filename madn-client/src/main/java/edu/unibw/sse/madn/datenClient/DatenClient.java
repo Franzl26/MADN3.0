@@ -19,7 +19,7 @@ public interface DatenClient {
      * @param name Name des Designs
      * @return null bei Fehler sonst: Spielfeldkonfiguration
      */
-    SpielfeldKonfiguration konfigurationLaden(String name);
+    SpielfeldKonfiguration konfigurationLaden(String name, boolean sechser);
 
     /**
      * Speichert die Konfiguration, wie sie vom Server übermittelt wurde

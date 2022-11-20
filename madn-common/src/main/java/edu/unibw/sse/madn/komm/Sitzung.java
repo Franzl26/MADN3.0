@@ -30,7 +30,7 @@ public interface Sitzung extends Remote {
      * @param name Name des Designs
      * @return die geladene Spielfeld-Konfiguration oder null bei Fehler
      */
-    SpielfeldKonfiguration spielfeldKonfigurationHolen(String name) throws RemoteException;
+    SpielfeldKonfiguration spielfeldKonfigurationHolen(String name, boolean sechser) throws RemoteException;
 
 
     // Warteraum

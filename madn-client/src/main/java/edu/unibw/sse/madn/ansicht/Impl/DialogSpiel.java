@@ -245,9 +245,11 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         private int highlightedField = -1;
 
         public void onMouseClickedField(double x, double y) {
-            for (int i = 0; i < 72; i++) {
+            int anzahl = config.sechser ? 96 : 72;
+            int size = config.sechser ? 15 : 17;
+            for (int i = 0; i < anzahl; i++) {
                 int[] koords = config.pointCoordinates[i];
-                if (Math.hypot(x - koords[0], y - koords[1]) < 17 - 2) {
+                if (Math.hypot(x - koords[0], y - koords[1]) < size - 2) {
                     //System.out.println("Field clicked: " + i);
                     if (!highlighted && brettStatus[i] == FELD_LEER) return;
                     if (!highlighted) {

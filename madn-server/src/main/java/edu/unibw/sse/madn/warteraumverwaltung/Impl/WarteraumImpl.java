@@ -8,8 +8,8 @@ public class WarteraumImpl {
     private static long ID_ZAEHLER = 0;
 
     private final long id = ID_ZAEHLER++;
-    private final ArrayList<String> namen = new ArrayList<>(4);
-    private final ArrayList<String> clients = new ArrayList<>(4);
+    private final ArrayList<String> namen = new ArrayList<>(6);
+    private final ArrayList<String> clients = new ArrayList<>(6);
     private int botAnzahl = 0;
     private int spielerAnzahl = 0;
 
