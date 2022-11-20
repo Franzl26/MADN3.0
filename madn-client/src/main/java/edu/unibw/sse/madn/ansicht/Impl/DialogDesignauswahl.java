@@ -41,7 +41,7 @@ public class DialogDesignauswahl extends AnchorPane {
                 return;
             }
             last = true;
-            SpielfeldKonfigurationIntern config = ansichtImpl.spielfeldKonfigurationLaden(boardChoice.getValue());
+            SpielfeldKonfigurationIntern config = ansichtImpl.spielfeldKonfigurationLaden(boardChoice.getValue(), null);
             FeldBesetztStatus[] state = new FeldBesetztStatus[72];
             Arrays.fill(state, 0, 4, FeldBesetztStatus.FELD_SPIELER1);
             Arrays.fill(state, 4, 8, FeldBesetztStatus.FELD_SPIELER2);

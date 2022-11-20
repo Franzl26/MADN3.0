@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.drawBoardAll;
 import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.drawBoardSingleFieldAll;
-import static edu.unibw.sse.madn.base.FeldBesetztStatus.FELD_LEER;
+import static edu.unibw.sse.madn.base.FeldBesetztStatus.*;
 
 public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     private SpielfeldKonfigurationIntern config;
@@ -106,7 +106,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     }
 
     public void loeschen() {
-        FeldBesetztStatus[] feld = new FeldBesetztStatus[72];
+        FeldBesetztStatus[] feld = new FeldBesetztStatus[96];
         Arrays.fill(feld, FELD_LEER);
         drawBoardIntern(feld);
         drawDiceIntern(0);
@@ -120,12 +120,24 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     }
 
     private void drawBoardIntern(FeldBesetztStatus[] board) {
+        if (board.length > 72 && !config.sechser) {
+            designNachladen();
+        }
         drawBoardAll(gcBoard, config, board);
     }
 
     private void drawBoardSingleFieldIntern(FeldBesetztStatus state, int i, boolean highlight) {
+        if (brettStatus.length > 72 && !config.sechser) {
+            designNachladen();
+        }
         drawBoardSingleFieldAll(gcBoard, config, state, i, highlight);
     }
+
+    private void designNachladen() {
+        config = ansichtImpl.spielfeldKonfigurationLaden(null, null);
+    }
+
+    private int[] felderVonSpieler;
 
     private void drawNamesIntern(String[] players, int turn) {
         if (players == null) return;
@@ -134,7 +146,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         gcName.setFont(Font.font(40));
         gcName.setFill(Color.BLACK);
         for (int i = 0; i < players.length; i++) {
-            gcName.drawImage(config.figure[(players.length == 2 ? (i == 0 ? 0 : 2) : i)], 5 + 245 * i, 5, 40, 40);
+            gcName.drawImage(config.figure[felderVonSpieler[i]], 5 + 245 * i, 5, 40, 40);
             String p = players[i];
             gcName.fillText(p, i * 245 + 50, 40, 190);
             if (i == turn) gcName.fillRect(i * 245 + 5, 46, 235, 47);
@@ -193,6 +205,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     public void spielfeldUpdaten(FeldBesetztStatus[] feld, int[] geandert) {
         brettStatus = feld;
         Platform.runLater(() -> {
+
             hideGif();
             drawDiceIntern(0);
             if (geandert == null) drawBoardIntern(feld);
@@ -203,7 +216,23 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     @Override
     public void spielNamenUpdaten(String[] namen) {
         this.namen = namen;
-        Platform.runLater(() -> drawNamesIntern(namen, aktiverSpieler));
+        Platform.runLater(() -> {
+            int spielerAnzahl = namen.length;
+            felderVonSpieler = new int[spielerAnzahl];
+            if (spielerAnzahl == 2) {
+                felderVonSpieler[0] = 0;
+                felderVonSpieler[1] = 2;
+            } else if (spielerAnzahl == 3) {
+                felderVonSpieler[0] = 0;
+                felderVonSpieler[1] = 2;
+                felderVonSpieler[2] = 4;
+            } else {
+                for (int i = 0; i < spielerAnzahl; i++) {
+                    felderVonSpieler[i] = i;
+                }
+            }
+            drawNamesIntern(namen, aktiverSpieler);
+        });
     }
 
     @Override

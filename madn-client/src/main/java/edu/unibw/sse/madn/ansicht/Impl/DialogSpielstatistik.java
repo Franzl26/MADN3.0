@@ -19,7 +19,7 @@ public class DialogSpielstatistik extends AnchorPane {
     private DialogSpielstatistik(AnsichtImpl ansichtImpl) {
         this.ansichtImpl = ansichtImpl;
 
-        Canvas canvas = new Canvas(780, 710);
+        Canvas canvas = new Canvas(1250, 730);
         gc = canvas.getGraphicsContext2D();
 
         Button okayButton = new Button("Okay");
@@ -47,13 +47,18 @@ public class DialogSpielstatistik extends AnchorPane {
         gc.setFont(Font.font(40));
         String[] s = stats.platzierungen();
         for (int i = 0; i < anzahl; i++) {
-            gc.fillText("Platz " + (i + 1) + ": " + (s[i] != null ? s[i] : ""), 5, i * 40 + 30);
+            gc.fillText("Platz " + (i + 1) + ": " + (s[i] != null ? s[i] : ""), (i>=3?500:5), (i>=3?i-3:i) * 40 + 30);
         }
 
         int[][] wuerfe = stats.zahlenGewuerfelt();
         for (int i = 0; i < anzahl; i++) {
-            int baseX = 5 + (i % 2) * 400;
-            int baseY = 190 + (i > 1 ? 180 : 0);
+            int baseX = switch (i) {
+                case 0, 3 -> 5;
+                case 1, 4 -> 405;
+                case 2, 5 -> 805;
+                default -> 1000;
+            };
+            int baseY = 160 + (i >= 3 ? 180 : 0);
             gc.setFont(Font.font(30));
             gc.fillText(names[i], baseX, baseY);
             gc.setFont(Font.font(20));
@@ -92,7 +97,7 @@ public class DialogSpielstatistik extends AnchorPane {
         long h = time / 3600;
         long min = (time % 3600) / 60;
         long sek = (time % 60);
-        gc.fillText("Spielzeit:    " + (h < 10 ? "0" + h : h) + ":" + (min < 10 ? "0" + min : min) + ":" + (sek < 10 ? "0" + sek : sek) + " h", 5, 690);
+        gc.fillText("Spielzeit:    " + (h < 10 ? "0" + h : h) + ":" + (min < 10 ? "0" + min : min) + ":" + (sek < 10 ? "0" + sek : sek) + " h", 5, 700);
     }
 
     private void setOnClose() {
@@ -109,7 +114,7 @@ public class DialogSpielstatistik extends AnchorPane {
 
     public static void dialogSpielstatistikStart(AnsichtImpl ansichtImpl, Spielstatistik spielstatistik) {
         DialogSpielstatistik root = new DialogSpielstatistik(ansichtImpl);
-        Scene scene = new Scene(root, 800, 730);
+        Scene scene = new Scene(root, 1250, 750);
         Stage stage = new Stage();
 
         stage.setTitle("Spielstatistik");

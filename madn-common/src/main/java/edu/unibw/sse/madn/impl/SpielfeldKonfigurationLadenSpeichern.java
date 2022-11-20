@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 public class SpielfeldKonfigurationLadenSpeichern {
     public static SpielfeldKonfiguration loadBoardKonfiguration(String dir, boolean sechser) {
-        System.out.println(sechser);
         if (!dir.endsWith("/")) dir = dir.concat("/");
         File f = new File(dir);
         if (!f.isDirectory()) return null;

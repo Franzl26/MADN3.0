@@ -14,12 +14,12 @@ public class SpielstatistikIntern {
     private final long startZeit;
 
     SpielstatistikIntern() {
-        this.names = new String[4];
-        zahlenGewuerfelt = new int[4][6];
-        andereGeschlagen = new int[4];
-        geschlagenWorden = new int[4];
-        platzierungen = new String[4];
-        prioZugFalsch = new int[4];
+        this.names = new String[6];
+        zahlenGewuerfelt = new int[6][6];
+        andereGeschlagen = new int[6];
+        geschlagenWorden = new int[6];
+        platzierungen = new String[6];
+        prioZugFalsch = new int[6];
         startZeit = System.currentTimeMillis();
     }
 

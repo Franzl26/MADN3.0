@@ -32,6 +32,7 @@ public class SpielObjekt {
     private final FeldBesetztStatus[] felderVonSpieler;
     private final boolean[] finished;
     private int anzahlFinished = 0;
+    private boolean sechser = false;
 
     private final int spielerAnzahl;
     private final FeldBesetztStatus[] boardState;
@@ -43,6 +44,10 @@ public class SpielObjekt {
     private Timer timerZiehen = new Timer();
     private Timer timerWaiting = new Timer();
 
+    // todo entfernen
+    private int[] wuerfel = new int[]{6,4,3,3,3,6,2,6,2,3,3,3,6,6,5};
+    private int wuerfelCount = 0;
+
     protected SpielObjekt(SpielLogikImpl spielLogikImpl, AnClientSendenSpiel anClient, String[] sitzungen, int spielerUndBotsAnz) {
         this.spielLogikImpl = spielLogikImpl;
         this.anClient = anClient;
@@ -53,28 +58,43 @@ public class SpielObjekt {
         felderVonSpieler = new FeldBesetztStatus[spielerAnzahl];
         finished = new boolean[spielerAnzahl];
 
+        if (spielerAnzahl == 3 || spielerAnzahl > 4) sechser = true;
+
+        int botAnzahl = 0;
+        for (int i = 0; i < spielerAnzahl; i++) {
+            if (clients[i] == null) {
+                botAnzahl++;
+                namen[i] = "Bot" + botAnzahl;
+            } else {
+                namen[i] = clients[i];
+            }
+        }
+
         if (spielerAnzahl == 2) {
-            namen[0] = (clients[0] == null ? "Bot0" : clients[0]);
-            namen[1] = (clients[1] == null ? "Bot1" : clients[1]);
             felderVonSpieler[0] = FELD_SPIELER1;
             felderVonSpieler[1] = FELD_SPIELER3;
+        } else if (spielerAnzahl == 3) {
+            felderVonSpieler[0] = FELD_SPIELER1;
+            felderVonSpieler[1] = FELD_SPIELER3;
+            felderVonSpieler[2] = FELD_SPIELER5;
         } else {
             for (int i = 0; i < spielerAnzahl; i++) {
-                namen[i] = (clients[i] == null ? "Bot" + i : clients[i]);
                 felderVonSpieler[i] = switch (i) {
                     case 0 -> FELD_SPIELER1;
                     case 1 -> FELD_SPIELER2;
                     case 2 -> FELD_SPIELER3;
-                    default -> FELD_SPIELER4;
+                    case 3 -> FELD_SPIELER4;
+                    case 4 -> FELD_SPIELER5;
+                    default -> FELD_SPIELER6;
                 };
             }
         }
         spielStatistik = new SpielstatistikIntern();
         spielStatistik.namenSetzen(namen);
-        boardState = feldFuellen(spielerAnzahl);
+        boardState = feldFuellen(spielerAnzahl, sechser);
 
         Timer t = new Timer("startGame");
-        t.schedule(new StartGame(), 1000);
+        t.schedule(new StartGame(), 200);
 
         displayNewStateAll(boardState, null);
         aktivenSpielerSendenAlle(-1);
@@ -85,9 +105,13 @@ public class SpielObjekt {
         if (i == -1 || aktiverSpieler != i) return ZiehenRueckgabe.NICHT_DRAN;
         FeldBesetztStatus field = felderVonSpieler[aktiverSpieler];
         if (zahlGewuerfelt == -1) return ZiehenRueckgabe.NICHT_GEWUERFELT;
-        if (!checkMoveValid(boardState, field, from, to, zahlGewuerfelt)) return ZiehenRueckgabe.ZUG_FEHLERHAFT;
-        int[] prio = checkForPrioMove(boardState, field, zahlGewuerfelt);
-        if (prio != null && prio[0] < 16 && from > 15) return ZiehenRueckgabe.ZUG_FEHLERHAFT;
+        if (!checkMoveValid(boardState, field, from, to, zahlGewuerfelt, sechser)) return ZiehenRueckgabe.ZUG_FEHLERHAFT;
+        int[] prio = checkForPrioMove(boardState, field, zahlGewuerfelt, sechser);
+        if (sechser) {
+            if (prio != null && prio[0] < 24 && from > 23) return ZiehenRueckgabe.ZUG_FEHLERHAFT;
+        } else {
+            if (prio != null && prio[0] < 16 && from > 15) return ZiehenRueckgabe.ZUG_FEHLERHAFT;
+        }
         return submitMoveIntern(from, to);
     }
 
@@ -112,7 +136,10 @@ public class SpielObjekt {
             }
             changed[3] = figurZurueckAufStartpositionen(to);
         }
-        int[] bestrafung = checkBestrafen(fieldStateFrom, from);
+        int[] bestrafung = new int[]{-1,-1};
+        if (clients[aktiverSpieler] != null) {
+            bestrafung = checkBestrafen(fieldStateFrom, from);
+        }
         changed[2] = bestrafung[0];
         changed[4] = bestrafung[1];
         if (changed[2] != -1) spielStatistik.incPrioZugIgnoriert(aktiverSpieler);
@@ -127,27 +154,60 @@ public class SpielObjekt {
         return (changed[2] == -1 ? ZiehenRueckgabe.ERFOLGREICH : ZiehenRueckgabe.BESTRAFT);
     }
 
+    @SuppressWarnings("DuplicatedCode")
     private void checkFinished(FeldBesetztStatus fieldStateFrom) {
-        // gewonnen Erkennung
-        if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER1 && boardState[16] == FELD_SPIELER1 && boardState[17] == FELD_SPIELER1 && boardState[18] == FELD_SPIELER1 && boardState[19] == FELD_SPIELER1) {
-            finished[aktiverSpieler] = true;
-            spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
-            anzahlFinished++;
-        }
-        if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER2 && boardState[20] == FELD_SPIELER2 && boardState[21] == FELD_SPIELER2 && boardState[22] == FELD_SPIELER2 && boardState[23] == FELD_SPIELER2) {
-            finished[aktiverSpieler] = true;
-            spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
-            anzahlFinished++;
-        }
-        if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER3 && boardState[24] == FELD_SPIELER3 && boardState[25] == FELD_SPIELER3 && boardState[26] == FELD_SPIELER3 && boardState[27] == FELD_SPIELER3) {
-            finished[aktiverSpieler] = true;
-            spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
-            anzahlFinished++;
-        }
-        if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER4 && boardState[28] == FELD_SPIELER4 && boardState[29] == FELD_SPIELER4 && boardState[30] == FELD_SPIELER4 && boardState[31] == FELD_SPIELER4) {
-            finished[aktiverSpieler] = true;
-            spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
-            anzahlFinished++;
+        if (sechser) {
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER1 && boardState[24] == FELD_SPIELER1 && boardState[25] == FELD_SPIELER1 && boardState[26] == FELD_SPIELER1 && boardState[27] == FELD_SPIELER1) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER2 && boardState[28] == FELD_SPIELER2 && boardState[29] == FELD_SPIELER2 && boardState[30] == FELD_SPIELER2 && boardState[31] == FELD_SPIELER2) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER3 && boardState[32] == FELD_SPIELER3 && boardState[33] == FELD_SPIELER3 && boardState[34] == FELD_SPIELER3 && boardState[35] == FELD_SPIELER3) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER4 && boardState[36] == FELD_SPIELER4 && boardState[37] == FELD_SPIELER4 && boardState[38] == FELD_SPIELER4 && boardState[39] == FELD_SPIELER4) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER5 && boardState[40] == FELD_SPIELER5 && boardState[41] == FELD_SPIELER5 && boardState[42] == FELD_SPIELER5 && boardState[43] == FELD_SPIELER5) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER6 && boardState[44] == FELD_SPIELER6 && boardState[45] == FELD_SPIELER6 && boardState[46] == FELD_SPIELER6 && boardState[47] == FELD_SPIELER6) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+        } else {
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER1 && boardState[16] == FELD_SPIELER1 && boardState[17] == FELD_SPIELER1 && boardState[18] == FELD_SPIELER1 && boardState[19] == FELD_SPIELER1) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER2 && boardState[20] == FELD_SPIELER2 && boardState[21] == FELD_SPIELER2 && boardState[22] == FELD_SPIELER2 && boardState[23] == FELD_SPIELER2) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER3 && boardState[24] == FELD_SPIELER3 && boardState[25] == FELD_SPIELER3 && boardState[26] == FELD_SPIELER3 && boardState[27] == FELD_SPIELER3) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
+            if (!finished[aktiverSpieler] && fieldStateFrom == FELD_SPIELER4 && boardState[28] == FELD_SPIELER4 && boardState[29] == FELD_SPIELER4 && boardState[30] == FELD_SPIELER4 && boardState[31] == FELD_SPIELER4) {
+                finished[aktiverSpieler] = true;
+                spielStatistik.platzierungSetzen(anzahlFinished, namen[aktiverSpieler]);
+                anzahlFinished++;
+            }
         }
         if (anzahlFinished == spielerAnzahl - 1) {
             for (int i = 0; i < spielerAnzahl; i++) {
@@ -165,36 +225,81 @@ public class SpielObjekt {
      */
     private int[] checkBestrafen(FeldBesetztStatus aktuellerSpieler, int from) {
         int[] ret = new int[]{-1, -1};
-        // bestrafen
-        // abrücken
-        if (from != 32 && aktuellerSpieler == FELD_SPIELER1 && boardState[32] == FELD_SPIELER1 && boardState[32 + zahlGewuerfelt] != FELD_SPIELER1 && (boardState[0] == FELD_SPIELER1 || boardState[1] == FELD_SPIELER1 || boardState[2] == FELD_SPIELER1 || boardState[3] == FELD_SPIELER1)) {
-            ret[0] = figurZurueckAufStartpositionen(32);
-            ret[1] = 32;
-        }
-        if (from != 42 && aktuellerSpieler == FELD_SPIELER2 && boardState[42] == FELD_SPIELER2 && boardState[42 + zahlGewuerfelt] != FELD_SPIELER2 && (boardState[4] == FELD_SPIELER2 || boardState[5] == FELD_SPIELER2 || boardState[6] == FELD_SPIELER2 || boardState[7] == FELD_SPIELER2)) {
-            ret[0] = figurZurueckAufStartpositionen(42);
-            ret[1] = 42;
-        }
-        if (from != 52 && aktuellerSpieler == FELD_SPIELER3 && boardState[52] == FELD_SPIELER3 && boardState[52 + zahlGewuerfelt] != FELD_SPIELER3 && (boardState[8] == FELD_SPIELER3 || boardState[9] == FELD_SPIELER3 || boardState[10] == FELD_SPIELER3 || boardState[11] == FELD_SPIELER3)) {
-            ret[0] = figurZurueckAufStartpositionen(52);
-            ret[1] = 52;
-        }
-        if (from != 62 && aktuellerSpieler == FELD_SPIELER4 && boardState[62] == FELD_SPIELER4 && boardState[62 + zahlGewuerfelt] != FELD_SPIELER4 && (boardState[12] == FELD_SPIELER4 || boardState[13] == FELD_SPIELER4 || boardState[14] == FELD_SPIELER4 || boardState[15] == FELD_SPIELER4)) {
-            ret[0] = figurZurueckAufStartpositionen(62);
-            ret[1] = 62;
-        }
-        // schlagen
-        if (from > 31 && ret[0] != -1) {
-            for (int i = 39; i >= 0; i--) {
-                int intFieldTo = (i + zahlGewuerfelt) % 40 + 32;
-                if ((i + 32) != from && boardState[i + 32] == aktuellerSpieler && boardState[intFieldTo] != aktuellerSpieler && boardState[intFieldTo] != FELD_LEER) {
-                    // nicht über Start beachten
-                    if (aktuellerSpieler == FELD_SPIELER1 && (i + zahlGewuerfelt) >= 40) continue;
-                    if (aktuellerSpieler == FELD_SPIELER2 && (i + zahlGewuerfelt) >= 10 && i < 10) continue;
-                    if (aktuellerSpieler == FELD_SPIELER3 && (i + zahlGewuerfelt) >= 20 && i < 20) continue;
-                    if (aktuellerSpieler == FELD_SPIELER4 && (i + zahlGewuerfelt) >= 30 && i < 30) continue;
-                    ret[0] = figurZurueckAufStartpositionen(i + 32);
-                    ret[1] = i + 32;
+        System.out.println("check bestrafen");
+        if (sechser) {
+            // abrücken
+            if (from != 48 && aktuellerSpieler == FELD_SPIELER1 && boardState[48] == FELD_SPIELER1 && boardState[48 + zahlGewuerfelt] != FELD_SPIELER1 && (boardState[0] == FELD_SPIELER1 || boardState[1] == FELD_SPIELER1 || boardState[2] == FELD_SPIELER1 || boardState[3] == FELD_SPIELER1)) {
+                ret[0] = figurZurueckAufStartpositionen(48);
+                ret[1] = 48;
+            }
+            if (from != 56 && aktuellerSpieler == FELD_SPIELER2 && boardState[56] == FELD_SPIELER2 && boardState[42 + zahlGewuerfelt] != FELD_SPIELER2 && (boardState[4] == FELD_SPIELER2 || boardState[5] == FELD_SPIELER2 || boardState[6] == FELD_SPIELER2 || boardState[7] == FELD_SPIELER2)) {
+                ret[0] = figurZurueckAufStartpositionen(56);
+                ret[1] = 56;
+            }
+            if (from != 64 && aktuellerSpieler == FELD_SPIELER3 && boardState[64] == FELD_SPIELER3 && boardState[52 + zahlGewuerfelt] != FELD_SPIELER3 && (boardState[8] == FELD_SPIELER3 || boardState[9] == FELD_SPIELER3 || boardState[10] == FELD_SPIELER3 || boardState[11] == FELD_SPIELER3)) {
+                ret[0] = figurZurueckAufStartpositionen(64);
+                ret[1] = 64;
+            }
+            if (from != 72 && aktuellerSpieler == FELD_SPIELER4 && boardState[72] == FELD_SPIELER4 && boardState[62 + zahlGewuerfelt] != FELD_SPIELER4 && (boardState[12] == FELD_SPIELER4 || boardState[13] == FELD_SPIELER4 || boardState[14] == FELD_SPIELER4 || boardState[15] == FELD_SPIELER4)) {
+                ret[0] = figurZurueckAufStartpositionen(72);
+                ret[1] = 72;
+            }
+            if (from != 80 && aktuellerSpieler == FELD_SPIELER5 && boardState[80] == FELD_SPIELER5 && boardState[62 + zahlGewuerfelt] != FELD_SPIELER5 && (boardState[16] == FELD_SPIELER5 || boardState[17] == FELD_SPIELER5 || boardState[18] == FELD_SPIELER5 || boardState[19] == FELD_SPIELER5)) {
+                ret[0] = figurZurueckAufStartpositionen(80);
+                ret[1] = 80;
+            }
+            if (from != 88 && aktuellerSpieler == FELD_SPIELER6 && boardState[88] == FELD_SPIELER6 && boardState[62 + zahlGewuerfelt] != FELD_SPIELER6 && (boardState[20] == FELD_SPIELER6 || boardState[21] == FELD_SPIELER6 || boardState[22] == FELD_SPIELER6 || boardState[23] == FELD_SPIELER6)) {
+                ret[0] = figurZurueckAufStartpositionen(88);
+                ret[1] = 88;
+            }
+            // schlagen
+            if (from > 47 && ret[0] != -1) {
+                for (int i = 47; i >= 0; i--) {
+                    int intFieldTo = (i + zahlGewuerfelt) % 48 + 48;
+                    if ((i + 48) != from && boardState[i + 48] == aktuellerSpieler && boardState[intFieldTo] != aktuellerSpieler && boardState[intFieldTo] != FELD_LEER) {
+                        // nicht über Start beachten
+                        if (aktuellerSpieler == FELD_SPIELER1 && (i + zahlGewuerfelt) >= 48) continue;
+                        if (aktuellerSpieler == FELD_SPIELER2 && (i + zahlGewuerfelt) >= 8 && i < 8) continue;
+                        if (aktuellerSpieler == FELD_SPIELER3 && (i + zahlGewuerfelt) >= 16 && i < 16) continue;
+                        if (aktuellerSpieler == FELD_SPIELER4 && (i + zahlGewuerfelt) >= 24 && i < 24) continue;
+                        if (aktuellerSpieler == FELD_SPIELER5 && (i + zahlGewuerfelt) >= 32 && i < 32) continue;
+                        if (aktuellerSpieler == FELD_SPIELER6 && (i + zahlGewuerfelt) >= 40 && i < 40) continue;
+                        ret[0] = figurZurueckAufStartpositionen(i + 48);
+                        ret[1] = i + 48;
+                    }
+                }
+            }
+        } else {
+            // abrücken
+            if (from != 32 && aktuellerSpieler == FELD_SPIELER1 && boardState[32] == FELD_SPIELER1 && boardState[32 + zahlGewuerfelt] != FELD_SPIELER1 && (boardState[0] == FELD_SPIELER1 || boardState[1] == FELD_SPIELER1 || boardState[2] == FELD_SPIELER1 || boardState[3] == FELD_SPIELER1)) {
+                ret[0] = figurZurueckAufStartpositionen(32);
+                ret[1] = 32;
+            }
+            if (from != 42 && aktuellerSpieler == FELD_SPIELER2 && boardState[42] == FELD_SPIELER2 && boardState[42 + zahlGewuerfelt] != FELD_SPIELER2 && (boardState[4] == FELD_SPIELER2 || boardState[5] == FELD_SPIELER2 || boardState[6] == FELD_SPIELER2 || boardState[7] == FELD_SPIELER2)) {
+                ret[0] = figurZurueckAufStartpositionen(42);
+                ret[1] = 42;
+            }
+            if (from != 52 && aktuellerSpieler == FELD_SPIELER3 && boardState[52] == FELD_SPIELER3 && boardState[52 + zahlGewuerfelt] != FELD_SPIELER3 && (boardState[8] == FELD_SPIELER3 || boardState[9] == FELD_SPIELER3 || boardState[10] == FELD_SPIELER3 || boardState[11] == FELD_SPIELER3)) {
+                ret[0] = figurZurueckAufStartpositionen(52);
+                ret[1] = 52;
+            }
+            if (from != 62 && aktuellerSpieler == FELD_SPIELER4 && boardState[62] == FELD_SPIELER4 && boardState[62 + zahlGewuerfelt] != FELD_SPIELER4 && (boardState[12] == FELD_SPIELER4 || boardState[13] == FELD_SPIELER4 || boardState[14] == FELD_SPIELER4 || boardState[15] == FELD_SPIELER4)) {
+                ret[0] = figurZurueckAufStartpositionen(62);
+                ret[1] = 62;
+            }
+            // schlagen
+            if (from > 31 && ret[0] != -1) {
+                for (int i = 39; i >= 0; i--) {
+                    int intFieldTo = (i + zahlGewuerfelt) % 40 + 32;
+                    if ((i + 32) != from && boardState[i + 32] == aktuellerSpieler && boardState[intFieldTo] != aktuellerSpieler && boardState[intFieldTo] != FELD_LEER) {
+                        // nicht über Start beachten
+                        if (aktuellerSpieler == FELD_SPIELER1 && (i + zahlGewuerfelt) >= 40) continue;
+                        if (aktuellerSpieler == FELD_SPIELER2 && (i + zahlGewuerfelt) >= 10 && i < 10) continue;
+                        if (aktuellerSpieler == FELD_SPIELER3 && (i + zahlGewuerfelt) >= 20 && i < 20) continue;
+                        if (aktuellerSpieler == FELD_SPIELER4 && (i + zahlGewuerfelt) >= 30 && i < 30) continue;
+                        ret[0] = figurZurueckAufStartpositionen(i + 32);
+                        ret[1] = i + 32;
+                    }
                 }
             }
         }
@@ -212,12 +317,17 @@ public class SpielObjekt {
 
         timerWuerfeln.cancel();
         if (zahlGewuerfelt > 0) {
-            if (getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt)[0] != -1)
+            if (getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt, sechser)[0] != -1)
                 return WuerfelnRueckgabe.FALSCHE_PHASE;
         }
         if (anzahlWuerfeln == 0) return WuerfelnRueckgabe.NICHT_DRAN;
 
-        zahlGewuerfelt = (int) (Math.random() * 6 + 1);
+        // todo entfernen
+        if (wuerfelCount < wuerfel.length) {
+            zahlGewuerfelt = wuerfel[wuerfelCount++];
+        }else {
+            zahlGewuerfelt = (int) (Math.random() * 6 + 1);
+        }
 
         spielStatistik.incZahlGewuerfelt(aktiverSpieler, zahlGewuerfelt - 1);
         //System.out.println("throw diceIntern: " + namen[aktiverSpieler] + " : " + zahlGewuerfelt);
@@ -227,7 +337,7 @@ public class SpielObjekt {
             anzahlWuerfeln = 1;
         }
 
-        if (getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt)[0] == -1) { // kein Zug möglich
+        if (getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt, sechser)[0] == -1) { // kein Zug möglich
             nextMove(false);
             return WuerfelnRueckgabe.KEIN_ZUG_MOEGLICH;
         }
@@ -278,29 +388,68 @@ public class SpielObjekt {
 
     private int getAnzahlWuerfelnNext(int spielerNext) {
         FeldBesetztStatus fieldState = felderVonSpieler[spielerNext];
-        if (fieldState == FELD_SPIELER1) {
-            int countFehlen = 0;
-            for (int i = 0; i < 4; i++) if (boardState[i] == FELD_LEER) countFehlen++;
-            for (int i = 0; i < countFehlen; i++) if (boardState[19 - i] == FELD_LEER) return 1;
-            return 3;
-        }
-        if (fieldState == FELD_SPIELER2) {
-            int countFehlen = 0;
-            for (int i = 4; i < 8; i++) if (boardState[i] == FELD_LEER) countFehlen++;
-            for (int i = 0; i < countFehlen; i++) if (boardState[23 - i] == FELD_LEER) return 1;
-            return 3;
-        }
-        if (fieldState == FELD_SPIELER3) {
-            int countFehlen = 0;
-            for (int i = 8; i < 12; i++) if (boardState[i] == FELD_LEER) countFehlen++;
-            for (int i = 0; i < countFehlen; i++) if (boardState[27 - i] == FELD_LEER) return 1;
-            return 3;
-        }
-        if (fieldState == FELD_SPIELER4) {
-            int countFehlen = 0;
-            for (int i = 12; i < 16; i++) if (boardState[i] == FELD_LEER) countFehlen++;
-            for (int i = 0; i < countFehlen; i++) if (boardState[31 - i] == FELD_LEER) return 1;
-            return 3;
+        if (sechser) {
+            if (fieldState == FELD_SPIELER1) {
+                int countFehlen = 0;
+                for (int i = 0; i < 4; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[27 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER2) {
+                int countFehlen = 0;
+                for (int i = 4; i < 8; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[31 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER3) {
+                int countFehlen = 0;
+                for (int i = 8; i < 12; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[35 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER4) {
+                int countFehlen = 0;
+                for (int i = 12; i < 16; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[39 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER5) {
+                int countFehlen = 0;
+                for (int i = 16; i < 20; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[43 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER6) {
+                int countFehlen = 0;
+                for (int i = 20; i < 24; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[47 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+        } else {
+            if (fieldState == FELD_SPIELER1) {
+                int countFehlen = 0;
+                for (int i = 0; i < 4; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[19 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER2) {
+                int countFehlen = 0;
+                for (int i = 4; i < 8; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[23 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER3) {
+                int countFehlen = 0;
+                for (int i = 8; i < 12; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[27 - i] == FELD_LEER) return 1;
+                return 3;
+            }
+            if (fieldState == FELD_SPIELER4) {
+                int countFehlen = 0;
+                for (int i = 12; i < 16; i++) if (boardState[i] == FELD_LEER) countFehlen++;
+                for (int i = 0; i < countFehlen; i++) if (boardState[31 - i] == FELD_LEER) return 1;
+                return 3;
+            }
         }
         System.err.println("Fehler oder ich bin doof");
         return -1;
@@ -335,6 +484,22 @@ public class SpielObjekt {
         }
         if (field == FELD_SPIELER4) {
             for (int i = 12; i < 16; i++) {
+                if (boardState[i] == FELD_LEER) {
+                    boardState[i] = FELD_SPIELER4;
+                    return i;
+                }
+            }
+        }
+        if (field == FELD_SPIELER5) {
+            for (int i = 16; i < 20; i++) {
+                if (boardState[i] == FELD_LEER) {
+                    boardState[i] = FELD_SPIELER4;
+                    return i;
+                }
+            }
+        }
+        if (field == FELD_SPIELER6) {
+            for (int i = 20; i < 24; i++) {
                 if (boardState[i] == FELD_LEER) {
                     boardState[i] = FELD_SPIELER4;
                     return i;
@@ -386,7 +551,7 @@ public class SpielObjekt {
                 }
                 if (throwDiceIntern() == WuerfelnRueckgabe.KEIN_ZUG_MOEGLICH) return; // kein Zug möglich
             }
-            int[] move = getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt);
+            int[] move = getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt, sechser);
             if (move[0] != -1 && spieler == aktiverSpieler) {
                 try {
                     if (sleep) sleep(BOT_WAIT_ZIEHEN);

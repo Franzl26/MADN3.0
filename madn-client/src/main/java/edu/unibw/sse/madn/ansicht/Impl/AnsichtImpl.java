@@ -39,8 +39,16 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
             Meldungen.zeigeInformation("Fehler beim Starten","Standarddesign konnte nicht geladen werden");
             System.exit(-1);
         }
-        designs.put("Standard", new SpielfeldKonfigurationIntern(config));
+        designs4.put("Standard", new SpielfeldKonfigurationIntern(config));
+        SpielfeldKonfiguration config2 = datenClient.konfigurationLaden("Standard", true);
+        if (config2 == null) {
+            Meldungen.zeigeInformation("Fehler beim Starten","Standarddesign konnte nicht geladen werden");
+            System.exit(-1);
+        }
+        designs6.put("Standard", new SpielfeldKonfigurationIntern(config2));
         gifs = datenClient.alleGifsLaden();
+        System.out.println(designs4);
+        System.out.println(designs6);
     }
 
     @Override
@@ -55,23 +63,49 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
         dialogAnmelden.anzeigen(null, null);
     }
 
-    private final HashMap<String, SpielfeldKonfigurationIntern> designs = new HashMap<>();
+    private final HashMap<String, SpielfeldKonfigurationIntern> designs4 = new HashMap<>();
+    private final HashMap<String, SpielfeldKonfigurationIntern> designs6 = new HashMap<>();
 
-    SpielfeldKonfigurationIntern spielfeldKonfigurationLaden(String design) {
-        design += sechser?"6":"";
-        if (!designs.containsKey(design)) {
-            SpielfeldKonfiguration config = datenClient.konfigurationLaden(design, sechser);
+    SpielfeldKonfigurationIntern spielfeldKonfigurationLaden(String design, Boolean sechser) {
+        if (sechser == null) sechser = this.sechser;
+        if (design == null) design = ausgewaehltesDesign;
+        if (sechser) {
+            return spielfeldKonfigurationLadenIntern6(design);
+        } else {
+            return spielfeldKonfigurationLadenIntern4(design);
+        }
+    }
+
+    private SpielfeldKonfigurationIntern spielfeldKonfigurationLadenIntern4(String design) {
+        if (!designs4.containsKey(design)) {
+            SpielfeldKonfiguration config = datenClient.konfigurationLaden(design, false);
             if (config == null) {
-                config = clientKomm.spielfeldKonfigurationHolen(design, sechser);
+                config = clientKomm.spielfeldKonfigurationHolen(design, false);
                 if (config != null) {
                     datenClient.KonfigurationSpeichern(config, design);
                 } else {
                     design = "Standard";
                 }
             }
-            if (config != null) designs.put(design, new SpielfeldKonfigurationIntern(config));
+            if (config != null && !design.equals("Standard")) designs4.put(design, new SpielfeldKonfigurationIntern(config));
         }
-        return designs.get(design);
+        return designs4.get(design);
+    }
+
+    private SpielfeldKonfigurationIntern spielfeldKonfigurationLadenIntern6(String design) {
+        if (!designs6.containsKey(design)) {
+            SpielfeldKonfiguration config = datenClient.konfigurationLaden(design, true);
+            if (config == null) {
+                config = clientKomm.spielfeldKonfigurationHolen(design, true);
+                if (config != null) {
+                    datenClient.KonfigurationSpeichern(config, design);
+                } else {
+                    design = "Standard";
+                }
+            }
+            if (config != null && !design.equals("Standard")) designs6.put(design, new SpielfeldKonfigurationIntern(config));
+        }
+        return designs6.get(design);
     }
 
     private Media[] gifs;
@@ -147,9 +181,9 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
 
     void dialogSpielOeffnen() {
         if (dialogSpiel == null) {
-            dialogSpiel = DialogSpiel.dialogSpielStart(this, designs.get("Standard"));
+            dialogSpiel = DialogSpiel.dialogSpielStart(this, designs4.get("Standard"));
         }
-        dialogSpiel.setConfig(spielfeldKonfigurationLaden(ausgewaehltesDesign));
+        dialogSpiel.setConfig(spielfeldKonfigurationLaden(ausgewaehltesDesign, sechser));
         dialogSpiel.loeschen();
         dialogSpiel.anzeigen();
     }
