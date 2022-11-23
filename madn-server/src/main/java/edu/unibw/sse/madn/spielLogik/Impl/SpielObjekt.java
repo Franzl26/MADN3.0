@@ -7,6 +7,7 @@ import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 import edu.unibw.sse.madn.spielLogik.AnClientSendenSpiel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
@@ -45,7 +46,7 @@ public class SpielObjekt {
     private Timer timerWaiting = new Timer();
 
     // todo entfernen
-    private int[] wuerfel = new int[]{6,4,3,3,3,6,2,6,2,3,3,3,6,6,5};
+    private final int[] wuerfel = new int[]{6,4,3,3,3,6,2,6,2,3,3,3,6,6,5};
     private int wuerfelCount = 0;
 
     protected SpielObjekt(SpielLogikImpl spielLogikImpl, AnClientSendenSpiel anClient, String[] sitzungen, int spielerUndBotsAnz) {
@@ -96,8 +97,8 @@ public class SpielObjekt {
         Timer t = new Timer("startGame");
         t.schedule(new StartGame(), 200);
 
-        displayNewStateAll(boardState, null);
-        aktivenSpielerSendenAlle(-1);
+        displayNewState(boardState, null);
+        aktivenSpielerSenden(-1);
     }
 
     public synchronized ZiehenRueckgabe submitMove(String sitzung, int from, int to) {
@@ -149,7 +150,7 @@ public class SpielObjekt {
 
         checkFinished(fieldStateFrom);
 
-        displayNewStateAll(boardState, changed);
+        displayNewState(boardState, changed);
         nextMove(false);
         return (changed[2] == -1 ? ZiehenRueckgabe.ERFOLGREICH : ZiehenRueckgabe.BESTRAFT);
     }
@@ -332,12 +333,13 @@ public class SpielObjekt {
         spielStatistik.incZahlGewuerfelt(aktiverSpieler, zahlGewuerfelt - 1);
         //System.out.println("throw diceIntern: " + namen[aktiverSpieler] + " : " + zahlGewuerfelt);
         anzahlWuerfeln--;
-        displayDiceAll(zahlGewuerfelt);
+        displayDice(zahlGewuerfelt);
         if (zahlGewuerfelt == 6) {
             anzahlWuerfeln = 1;
         }
-
-        if (getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt, sechser)[0] == -1) { // kein Zug möglich
+        int[] validMove = getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt, sechser);
+        System.out.println(Arrays.toString(validMove));
+        if (validMove[0] == -1) { // kein Zug möglich
             nextMove(false);
             return WuerfelnRueckgabe.KEIN_ZUG_MOEGLICH;
         }
@@ -368,8 +370,8 @@ public class SpielObjekt {
                     } catch (InterruptedException e) {
                         System.err.println("schlafen unterbrochen");
                     }
-                    aktivenSpielerSendenAlle(aktiverSpieler);
-                    displayDiceAll(0);
+                    aktivenSpielerSenden(aktiverSpieler);
+                    displayDice(0);
                     anzahlWuerfeln = getAnzahlWuerfelnNext(aktiverSpieler);
                     //displayNewStateAll(boardState, new int[]{});
                 }
@@ -528,7 +530,7 @@ public class SpielObjekt {
         }
         Spielstatistik spielStatistik1 = spielStatistik.holeZumSenden();
         spielStatistik.namenSetzen(namen);
-        neueNamenSendenAlle(namen);
+        neueNamenSenden(namen);
         return spielStatistik1;
     }
 
@@ -563,44 +565,20 @@ public class SpielObjekt {
         }).start();
     }
 
-    private void displayDiceAll(int wurf) {
-        for (int i = 0; i < spielerAnzahl; i++) {
-            if (clients[i] != null) displayDice(clients[i], wurf);
-        }
+    private void displayDice(int wurf) {
+        new Thread(() -> anClient.wuerfelUpdaten(clients, wurf)).start();
     }
 
-    private void displayDice(String sitzung, int wurf) {
-        new Thread(() -> anClient.wuerfelUpdaten(sitzung, wurf)).start();
+    private void displayNewState(FeldBesetztStatus[] state, int[] changed) {
+        new Thread(() -> anClient.spielfeldUpdaten(clients, state, changed)).start();
     }
 
-    private void displayNewStateAll(FeldBesetztStatus[] state, int[] changed) {
-        for (int i = 0; i < spielerAnzahl; i++) {
-            if (clients[i] != null) displayNewStateIntern(clients[i], state, changed);
-        }
+    private void neueNamenSenden(String[] namen) {
+        new Thread(() -> anClient.spielNamenUpdaten(clients, namen)).start();
     }
 
-    private void displayNewStateIntern(String sitzung, FeldBesetztStatus[] state, int[] changed) {
-        new Thread(() -> anClient.spielfeldUpdaten(sitzung, state, changed)).start();
-    }
-
-    private void neueNamenSendenAlle(String[] namen) {
-        for (int i = 0; i < spielerAnzahl; i++) {
-            if (clients[i] != null) neuenNamenSenden(clients[i], namen);
-        }
-    }
-
-    private void neuenNamenSenden(String sitzung, String[] namen) {
-        new Thread(() -> anClient.spielNamenUpdaten(sitzung, namen)).start();
-    }
-
-    private void aktivenSpielerSendenAlle(int aktiverSpieler) {
-        for (int i = 0; i < spielerAnzahl; i++) {
-            if (clients[i] != null) aktivenSpielerSenden(clients[i], aktiverSpieler);
-        }
-    }
-
-    private void aktivenSpielerSenden(String sitzung, int aktiverSpieler) {
-        new Thread(() -> anClient.aktuellenSpielerSetzen(sitzung, aktiverSpieler)).start();
+    private void aktivenSpielerSenden(int aktiverSpieler) {
+        new Thread(() -> anClient.aktuellenSpielerSetzen(clients, aktiverSpieler)).start();
     }
 
     private void spielVorbeiSenden() {
@@ -628,8 +606,8 @@ public class SpielObjekt {
     private class StartGame extends TimerTask {
         @Override
         public void run() {
-            neueNamenSendenAlle(namen);
-            displayNewStateAll(boardState, null);
+            neueNamenSenden(namen);
+            displayNewState(boardState, null);
             //aktiverSpieler = spielerAnzahl - 1;
             nextMove(true);
         }

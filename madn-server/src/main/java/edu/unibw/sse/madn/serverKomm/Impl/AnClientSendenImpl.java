@@ -18,42 +18,62 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
     }
 
     @Override
-    public void spielfeldUpdaten(String benutzername, FeldBesetztStatus[] feld, int[] geandert) {
-        Sitzung benutzer = serverKommunikation.benutzerHolen(benutzername);
-        try {
-            benutzer.clientCallback().spielfeldUpdaten(feld, geandert);
-        } catch (RemoteException e) {
-            serverKommunikation.benutzerAbmelden(benutzername);
+    public void spielfeldUpdaten(String[] benutzernamen, FeldBesetztStatus[] feld, int[] geandert) {
+        for (String s : benutzernamen) {
+            if (s == null) continue;
+            new Thread(() -> {
+                Sitzung benutzer = serverKommunikation.benutzerHolen(s);
+                try {
+                    benutzer.clientCallback().spielfeldUpdaten(feld, geandert);
+                } catch (RemoteException e) {
+                    serverKommunikation.benutzerAbmelden(s);
+                }
+            }).start();
         }
     }
 
     @Override
-    public void spielNamenUpdaten(String benutzername, String[] namen) {
-        Sitzung benutzer = serverKommunikation.benutzerHolen(benutzername);
-        try {
-            benutzer.clientCallback().spielNamenUpdaten(namen);
-        } catch (RemoteException e) {
-            serverKommunikation.benutzerAbmelden(benutzername);
+    public void spielNamenUpdaten(String[] benutzernamen, String[] namen) {
+        for (String s : benutzernamen) {
+            if (s == null) continue;
+            new Thread(() -> {
+                Sitzung benutzer = serverKommunikation.benutzerHolen(s);
+                try {
+                    benutzer.clientCallback().spielNamenUpdaten(namen);
+                } catch (RemoteException e) {
+                    serverKommunikation.benutzerAbmelden(s);
+                }
+            }).start();
         }
     }
 
     @Override
-    public void aktuellenSpielerSetzen(String benutzername, int spieler) {
-        Sitzung benutzer = serverKommunikation.benutzerHolen(benutzername);
-        try {
-            benutzer.clientCallback().aktuellenSpielerSetzen(spieler);
-        } catch (RemoteException e) {
-            serverKommunikation.benutzerAbmelden(benutzername);
+    public void aktuellenSpielerSetzen(String[] benutzernamen, int spieler) {
+        for (String s : benutzernamen) {
+            if (s == null) continue;
+            new Thread(() -> {
+                Sitzung benutzer = serverKommunikation.benutzerHolen(s);
+                try {
+                    benutzer.clientCallback().aktuellenSpielerSetzen(spieler);
+                } catch (RemoteException e) {
+                    serverKommunikation.benutzerAbmelden(s);
+                }
+            }).start();
         }
     }
 
     @Override
-    public void wuerfelUpdaten(String benutzername, int wert) {
-        Sitzung benutzer = serverKommunikation.benutzerHolen(benutzername);
-        try {
-            benutzer.clientCallback().wuerfelUpdaten(wert);
-        } catch (RemoteException e) {
-            serverKommunikation.benutzerAbmelden(benutzername);
+    public void wuerfelUpdaten(String[] benutzernamen, int wert) {
+        for (String s : benutzernamen) {
+            if (s == null) continue;
+            new Thread(() -> {
+                Sitzung benutzer = serverKommunikation.benutzerHolen(s);
+                try {
+                    benutzer.clientCallback().wuerfelUpdaten(wert);
+                } catch (RemoteException e) {
+                    serverKommunikation.benutzerAbmelden(s);
+                }
+            }).start();
         }
     }
 

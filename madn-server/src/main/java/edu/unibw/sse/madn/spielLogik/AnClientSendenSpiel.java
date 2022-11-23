@@ -7,35 +7,35 @@ public interface AnClientSendenSpiel {
     /**
      * Spielfeld aktualisieren
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzernamen Namen der Clients die informiert werden sollen
      * @param feld         Feld
      * @param geandert     array der geänderten Felder, wenn null komplett neu zeichnen
      */
-    void spielfeldUpdaten(String benutzername, FeldBesetztStatus[] feld, int[] geandert);
+    void spielfeldUpdaten(String[] benutzernamen, FeldBesetztStatus[] feld, int[] geandert);
 
     /**
      * Namen der Spieler übermitteln
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzernamen Namen der Clients die informiert werden sollen
      * @param namen        Namen
      */
-    void spielNamenUpdaten(String benutzername, String[] namen);
+    void spielNamenUpdaten(String[] benutzernamen, String[] namen);
 
     /**
      * aktuellen Spieler setzen
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzernamen Namen der Clients die informiert werden sollen
      * @param spieler      Spieler
      */
-    void aktuellenSpielerSetzen(String benutzername, int spieler);
+    void aktuellenSpielerSetzen(String[] benutzernamen, int spieler);
 
     /**
      * Würfelwert übermitteln
      *
-     * @param benutzername Name des Clients der informiert werden soll
+     * @param benutzernamen Namen der Clients die informiert werden sollen
      * @param wert         Würfelwert
      */
-    void wuerfelUpdaten(String benutzername, int wert);
+    void wuerfelUpdaten(String[] benutzernamen, int wert);
 
     /**
      * Anzeigen, dass Zeit fürs Würfeln abgelaufen

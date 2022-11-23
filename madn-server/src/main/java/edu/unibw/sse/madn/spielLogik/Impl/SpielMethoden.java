@@ -388,17 +388,17 @@ public class SpielMethoden {
             if (boardState[i] == FELD_SPIELER4 && i + wurf < 76)
                 if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 36, wurf)) return new int[]{i, i + wurf - 36};
         if (field == FELD_SPIELER5) for (int i = 79; i > 79 - wurf; i--)
-            if (boardState[i] == FELD_SPIELER4 && i + wurf < 84)
+            if (boardState[i] == FELD_SPIELER5 && i + wurf < 84)
                 if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 40, wurf)) return new int[]{i, i + wurf - 40};
         if (field == FELD_SPIELER6) for (int i = 87; i > 87 - wurf; i--)
-            if (boardState[i] == FELD_SPIELER4 && i + wurf < 92)
+            if (boardState[i] == FELD_SPIELER6 && i + wurf < 92)
                 if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 44, wurf)) return new int[]{i, i + wurf - 44};
         // sonst zufällig
         int[] start = new int[4];
         int count = 0;
         for (int i = 48; i < 96; i++) {
             if (boardState[i] == field) {
-                if (checkMoveValidInternVierer(boardState, field, i, (i - 48 + wurf) % 48 + 48, wurf)) start[count++] = i;
+                if (checkMoveValidInternSechser(boardState, field, i, (i - 48 + wurf) % 48 + 48, wurf)) start[count++] = i;
             }
         }
         if (count > 0) {
