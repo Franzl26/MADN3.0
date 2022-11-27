@@ -6,15 +6,12 @@ import edu.unibw.sse.madn.base.WuerfelnRueckgabe;
 import edu.unibw.sse.madn.base.ZiehenRueckgabe;
 import edu.unibw.sse.madn.spielLogik.AnClientSendenSpiel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static edu.unibw.sse.madn.base.FeldBesetztStatus.*;
 import static edu.unibw.sse.madn.spielLogik.Impl.SpielMethoden.*;
+import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 public class SpielObjekt {
@@ -23,6 +20,8 @@ public class SpielObjekt {
     private static final int DELAY_WUERFELN = 10000;
     private static final int DELAY_SPIELZUG = 15000;
     private static final int DELAY_WAITING = 5000;
+    private static final int SLEEP_BETWEEN_MOVES = 1000;
+    private final boolean timer = true;
 
     private final SpielstatistikIntern spielStatistik;
     private final AnClientSendenSpiel anClient;
@@ -44,10 +43,6 @@ public class SpielObjekt {
     private Timer timerWuerfeln = new Timer();
     private Timer timerZiehen = new Timer();
     private Timer timerWaiting = new Timer();
-
-    // todo entfernen
-    private final int[] wuerfel = new int[]{6,4,3,3,3,6,2,6,2,3,3,3,6,6,5};
-    private int wuerfelCount = 0;
 
     protected SpielObjekt(SpielLogikImpl spielLogikImpl, AnClientSendenSpiel anClient, String[] sitzungen, int spielerUndBotsAnz) {
         this.spielLogikImpl = spielLogikImpl;
@@ -123,7 +118,7 @@ public class SpielObjekt {
         if (aktiverSpieler < 0) return ZiehenRueckgabe.NICHT_DRAN;
         timerZiehen.cancel();
         timerWaiting.cancel();
-        //System.out.println("Submit " + namen[aktiverSpieler] + ": " + from + " -> " + to);
+        System.out.println(currentThread().getName() + " does Submit " + namen[aktiverSpieler] + ": " + from + " -> " + to);
         int[] changed = new int[]{from, to, -1, -1, -1}; // from, to, strafe in loch, jmd geschlagen, strafe Figur die weg
         // wenn geschlagen zurücksetzen
         FeldBesetztStatus fieldStateFrom = boardState[from];
@@ -145,6 +140,9 @@ public class SpielObjekt {
         changed[4] = bestrafung[1];
         if (changed[2] != -1) spielStatistik.incPrioZugIgnoriert(aktiverSpieler);
 
+        if (boardState[to] == felderVonSpieler[aktiverSpieler]) {
+            System.err.println("fehler");
+        }
         boardState[to] = fieldStateFrom;
         boardState[from] = FELD_LEER;
 
@@ -226,7 +224,6 @@ public class SpielObjekt {
      */
     private int[] checkBestrafen(FeldBesetztStatus aktuellerSpieler, int from) {
         int[] ret = new int[]{-1, -1};
-        System.out.println("check bestrafen");
         if (sechser) {
             // abrücken
             if (from != 48 && aktuellerSpieler == FELD_SPIELER1 && boardState[48] == FELD_SPIELER1 && boardState[48 + zahlGewuerfelt] != FELD_SPIELER1 && (boardState[0] == FELD_SPIELER1 || boardState[1] == FELD_SPIELER1 || boardState[2] == FELD_SPIELER1 || boardState[3] == FELD_SPIELER1)) {
@@ -259,12 +256,7 @@ public class SpielObjekt {
                     int intFieldTo = (i + zahlGewuerfelt) % 48 + 48;
                     if ((i + 48) != from && boardState[i + 48] == aktuellerSpieler && boardState[intFieldTo] != aktuellerSpieler && boardState[intFieldTo] != FELD_LEER) {
                         // nicht über Start beachten
-                        if (aktuellerSpieler == FELD_SPIELER1 && (i + zahlGewuerfelt) >= 48) continue;
-                        if (aktuellerSpieler == FELD_SPIELER2 && (i + zahlGewuerfelt) >= 8 && i < 8) continue;
-                        if (aktuellerSpieler == FELD_SPIELER3 && (i + zahlGewuerfelt) >= 16 && i < 16) continue;
-                        if (aktuellerSpieler == FELD_SPIELER4 && (i + zahlGewuerfelt) >= 24 && i < 24) continue;
-                        if (aktuellerSpieler == FELD_SPIELER5 && (i + zahlGewuerfelt) >= 32 && i < 32) continue;
-                        if (aktuellerSpieler == FELD_SPIELER6 && (i + zahlGewuerfelt) >= 40 && i < 40) continue;
+                        if (ueberStart(aktuellerSpieler, i, zahlGewuerfelt)) continue;
                         ret[0] = figurZurueckAufStartpositionen(i + 48);
                         ret[1] = i + 48;
                     }
@@ -323,27 +315,21 @@ public class SpielObjekt {
         }
         if (anzahlWuerfeln == 0) return WuerfelnRueckgabe.NICHT_DRAN;
 
-        // todo entfernen
-        if (wuerfelCount < wuerfel.length) {
-            zahlGewuerfelt = wuerfel[wuerfelCount++];
-        }else {
-            zahlGewuerfelt = (int) (Math.random() * 6 + 1);
-        }
+        zahlGewuerfelt = (int) (Math.random() * 6 + 1);
 
         spielStatistik.incZahlGewuerfelt(aktiverSpieler, zahlGewuerfelt - 1);
-        //System.out.println("throw diceIntern: " + namen[aktiverSpieler] + " : " + zahlGewuerfelt);
+        System.out.println("throw diceIntern: " + namen[aktiverSpieler] + " : " + zahlGewuerfelt);
         anzahlWuerfeln--;
         displayDice(zahlGewuerfelt);
         if (zahlGewuerfelt == 6) {
             anzahlWuerfeln = 1;
         }
         int[] validMove = getValidMove(boardState, felderVonSpieler[aktiverSpieler], zahlGewuerfelt, sechser);
-        System.out.println(Arrays.toString(validMove));
         if (validMove[0] == -1) { // kein Zug möglich
             nextMove(false);
             return WuerfelnRueckgabe.KEIN_ZUG_MOEGLICH;
         }
-        if (clients[aktiverSpieler] != null) {
+        if (clients[aktiverSpieler] != null && timer) {
             timerZiehen = new Timer("TimerZiehen");
             timerZiehen.schedule(new ZiehenEnde(aktiverSpieler), DELAY_SPIELZUG);
             timerWaiting = new Timer("TimerWaiting");
@@ -352,7 +338,7 @@ public class SpielObjekt {
         return WuerfelnRueckgabe.ERFOLGREICH;
     }
 
-    private void nextMove(boolean naechstenErzwingen) {
+    private synchronized void nextMove(boolean naechstenErzwingen) {
         zahlGewuerfelt = -5;
         new Thread(() -> {
             try {
@@ -362,11 +348,10 @@ public class SpielObjekt {
                     return;
                 }
                 if (anzahlWuerfeln < 1 || naechstenErzwingen) {
-                    //System.out.println("set next");
                     aktiverSpieler = (aktiverSpieler + 1) % spielerAnzahl;
                     while (finished[aktiverSpieler]) aktiverSpieler = (aktiverSpieler + 1) % spielerAnzahl;
                     try {
-                        sleep(1000);
+                        sleep(SLEEP_BETWEEN_MOVES);
                     } catch (InterruptedException e) {
                         System.err.println("schlafen unterbrochen");
                     }
@@ -378,7 +363,7 @@ public class SpielObjekt {
                 zahlGewuerfelt = -1;
                 if (clients[aktiverSpieler] == null) {
                     doBotMove(aktiverSpieler, true);
-                } else {
+                } else if(timer) {
                     timerWuerfeln = new Timer("TimerWurf");
                     timerWuerfeln.schedule(new WuerfelnEnde(aktiverSpieler), DELAY_WUERFELN);
                 }
@@ -495,7 +480,7 @@ public class SpielObjekt {
         if (field == FELD_SPIELER5) {
             for (int i = 16; i < 20; i++) {
                 if (boardState[i] == FELD_LEER) {
-                    boardState[i] = FELD_SPIELER4;
+                    boardState[i] = FELD_SPIELER5;
                     return i;
                 }
             }
@@ -503,7 +488,7 @@ public class SpielObjekt {
         if (field == FELD_SPIELER6) {
             for (int i = 20; i < 24; i++) {
                 if (boardState[i] == FELD_LEER) {
-                    boardState[i] = FELD_SPIELER4;
+                    boardState[i] = FELD_SPIELER6;
                     return i;
                 }
             }
@@ -583,22 +568,12 @@ public class SpielObjekt {
 
     private void spielVorbeiSenden() {
         Spielstatistik zumSenden = spielStatistik.holeZumSenden();
-        new Thread(() -> {
-            ArrayList<String> clientsSenden = new ArrayList<>();
-            Pattern pattern = Pattern.compile(".*\\d$");
-            for (String c : clients) {
-                if (c != null) {
-                    Matcher m = pattern.matcher(c);
-                    if (!m.matches()) clientsSenden.add(c);
-                }
-            }
-            anClient.spielVorbei(clientsSenden.toArray(new String[0]), zumSenden);
-        }).start();
+        new Thread(() -> anClient.spielVorbei(clients, zumSenden)).start();
     }
 
     private int isInGame(String sitzung) {
         for (int i = 0; i < spielerAnzahl; i++) {
-            if (clients[i].equals(sitzung)) return i;
+            if (clients[i] != null && clients[i].equals(sitzung)) return i;
         }
         return -1;
     }
@@ -608,7 +583,6 @@ public class SpielObjekt {
         public void run() {
             neueNamenSenden(namen);
             displayNewState(boardState, null);
-            //aktiverSpieler = spielerAnzahl - 1;
             nextMove(true);
         }
     }
@@ -645,13 +619,9 @@ public class SpielObjekt {
         }
     }
 
-    String[] getClients() {
-        return clients;
-    }
-
     private class Waiting extends TimerTask {
-        private final int spieler;
 
+        private final int spieler;
         private Waiting(int spieler) {
             this.spieler = spieler;
         }
@@ -662,5 +632,9 @@ public class SpielObjekt {
                 anClient.gifAnzeigen(clients[spieler]);
             }
         }
+
+    }
+    String[] getClients() {
+        return clients;
     }
 }

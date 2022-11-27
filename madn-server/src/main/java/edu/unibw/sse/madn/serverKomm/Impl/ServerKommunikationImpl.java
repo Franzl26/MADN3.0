@@ -66,7 +66,7 @@ public class ServerKommunikationImpl implements ServerKommunikation {
         clients.remove(benutzername);
     }
 
-    void benutzerAbmelden(Sitzung sitzung) {
+    synchronized void benutzerAbmelden(Sitzung sitzung) {
         for (String s : clients.keySet()) {
             if (clients.get(s).equals(sitzung)) {
                 clients.remove(s);

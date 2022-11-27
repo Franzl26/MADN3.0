@@ -49,8 +49,13 @@ public class DialogSpielstatistik extends AnchorPane {
         for (int i = 0; i < anzahl; i++) {
             gc.fillText("Platz " + (i + 1) + ": " + (s[i] != null ? s[i] : ""), (i>=3?500:5), (i>=3?i-3:i) * 40 + 30);
         }
-
+        int maxWurf = 0;
         int[][] wuerfe = stats.zahlenGewuerfelt();
+        for (int i = 0; i<anzahl;i++) {
+            for (int j = 0; j < 6; j++) {
+                if (wuerfe[i][j] > maxWurf) maxWurf = wuerfe[i][j];
+            }
+        }
         for (int i = 0; i < anzahl; i++) {
             int baseX = switch (i) {
                 case 0, 3 -> 5;
@@ -62,11 +67,9 @@ public class DialogSpielstatistik extends AnchorPane {
             gc.setFont(Font.font(30));
             gc.fillText(names[i], baseX, baseY);
             gc.setFont(Font.font(20));
-            int maxWurf = 0;
             int gesamt = 0;
             for (int j = 0; j < 6; j++) {
                 gesamt += wuerfe[i][j];
-                if (wuerfe[i][j] > maxWurf) maxWurf = wuerfe[i][j];
             }
             if (gesamt == 0) continue;
             for (int j = 1; j < 7; j++) {

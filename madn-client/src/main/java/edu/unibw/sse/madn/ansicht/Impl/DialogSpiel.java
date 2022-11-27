@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.drawBoardAll;
 import static edu.unibw.sse.madn.ansicht.Impl.BrettZeichnen.drawBoardSingleFieldAll;
-import static edu.unibw.sse.madn.base.FeldBesetztStatus.*;
+import static edu.unibw.sse.madn.base.FeldBesetztStatus.FELD_LEER;
 
 public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     private SpielfeldKonfigurationIntern config;
@@ -143,13 +143,14 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         if (players == null) return;
         gcName.setFill(Color.LIGHTSLATEGRAY);
         gcName.fillRect(0, 0, 980, 50);
-        gcName.setFont(Font.font(40));
+        gcName.setFont(Font.font(30));
         gcName.setFill(Color.BLACK);
         for (int i = 0; i < players.length; i++) {
-            gcName.drawImage(config.figure[felderVonSpieler[i]], 5 + 245 * i, 5, 40, 40);
+            int baseX = 5 + 165 * i;
+            gcName.drawImage(config.figure[felderVonSpieler[i]], baseX, 15, 30, 30);
             String p = players[i];
-            gcName.fillText(p, i * 245 + 50, 40, 190);
-            if (i == turn) gcName.fillRect(i * 245 + 5, 46, 235, 47);
+            gcName.fillText(p, baseX + 35, 40, 125);
+            if (i == turn) gcName.fillRect(baseX, 46, 160, 47);
         }
     }
 

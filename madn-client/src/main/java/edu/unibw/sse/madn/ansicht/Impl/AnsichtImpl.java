@@ -47,8 +47,6 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
         }
         designs6.put("Standard", new SpielfeldKonfigurationIntern(config2));
         gifs = datenClient.alleGifsLaden();
-        System.out.println(designs4);
-        System.out.println(designs6);
     }
 
     @Override
@@ -210,7 +208,7 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
     }
 
     private Warteraum[] warteraeume;
-    private boolean sechser = false;
+    boolean sechser = false;
 
     @Override
     public void raeumeUpdaten(Warteraum[] warteraeumeUeb) {
@@ -255,5 +253,10 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
             }
         }
         return null;
+    }
+
+    public void startSpiel() {
+        dialogSpiel = DialogSpiel.dialogSpielStart(this, designs6.get("Standard"));
+        dialogSpiel.anzeigen();
     }
 }

@@ -58,6 +58,7 @@ public class DialogChat extends AnchorPane {
     }
 
     private void nachrichtSenden() {
+        if (inputTextField.getText().matches(" *")) return;
         AllgemeinerReturnWert ret = ansichtImpl.getClientKomm().nachrichtSenden(inputTextField.getText());
         switch (ret) {
             case ERFOLGREICH -> inputTextField.clear();

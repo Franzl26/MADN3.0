@@ -24,7 +24,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
             new Thread(() -> {
                 Sitzung benutzer = serverKommunikation.benutzerHolen(s);
                 try {
-                    benutzer.clientCallback().spielfeldUpdaten(feld, geandert);
+                    if (benutzer != null) benutzer.clientCallback().spielfeldUpdaten(feld, geandert);
                 } catch (RemoteException e) {
                     serverKommunikation.benutzerAbmelden(s);
                 }
@@ -39,7 +39,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
             new Thread(() -> {
                 Sitzung benutzer = serverKommunikation.benutzerHolen(s);
                 try {
-                    benutzer.clientCallback().spielNamenUpdaten(namen);
+                    if (benutzer != null) benutzer.clientCallback().spielNamenUpdaten(namen);
                 } catch (RemoteException e) {
                     serverKommunikation.benutzerAbmelden(s);
                 }
@@ -54,7 +54,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
             new Thread(() -> {
                 Sitzung benutzer = serverKommunikation.benutzerHolen(s);
                 try {
-                    benutzer.clientCallback().aktuellenSpielerSetzen(spieler);
+                    if (benutzer != null) benutzer.clientCallback().aktuellenSpielerSetzen(spieler);
                 } catch (RemoteException e) {
                     serverKommunikation.benutzerAbmelden(s);
                 }
@@ -69,7 +69,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
             new Thread(() -> {
                 Sitzung benutzer = serverKommunikation.benutzerHolen(s);
                 try {
-                    benutzer.clientCallback().wuerfelUpdaten(wert);
+                    if (benutzer != null) benutzer.clientCallback().wuerfelUpdaten(wert);
                 } catch (RemoteException e) {
                     serverKommunikation.benutzerAbmelden(s);
                 }
@@ -81,7 +81,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
     public void wuerfelnVorbei(String benutzername) {
         Sitzung benutzer = serverKommunikation.benutzerHolen(benutzername);
         try {
-            benutzer.clientCallback().wuerfelnVorbei();
+            if (benutzer != null) benutzer.clientCallback().wuerfelnVorbei();
         } catch (RemoteException e) {
             serverKommunikation.benutzerAbmelden(benutzername);
         }
@@ -91,7 +91,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
     public void ziehenVorbei(String benutzername) {
         Sitzung benutzer = serverKommunikation.benutzerHolen(benutzername);
         try {
-            benutzer.clientCallback().ziehenVorbei();
+            if (benutzer != null) benutzer.clientCallback().ziehenVorbei();
         } catch (RemoteException e) {
             serverKommunikation.benutzerAbmelden(benutzername);
         }
@@ -101,7 +101,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
     public void gifAnzeigen(String benutzername) {
         Sitzung benutzer = serverKommunikation.benutzerHolen(benutzername);
         try {
-            benutzer.clientCallback().gifAnzeigen();
+            if (benutzer != null) benutzer.clientCallback().gifAnzeigen();
         } catch (RemoteException e) {
             serverKommunikation.benutzerAbmelden(benutzername);
         }
@@ -113,7 +113,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
             new Thread(() -> {
                 Sitzung benutzer = serverKommunikation.benutzerHolen(s);
                 try {
-                    benutzer.clientCallback().spielVorbei(statistik);
+                    if (benutzer != null) benutzer.clientCallback().spielVorbei(statistik);
                 } catch (RemoteException e) {
                     serverKommunikation.benutzerAbmelden(s);
                 }
@@ -128,7 +128,7 @@ public class AnClientSendenImpl implements AnClientSendenSpiel, AnClientSendenRa
             new Thread(() -> {
                 Sitzung benutzer = serverKommunikation.benutzerHolen(s);
                 try {
-                    benutzer.clientCallback().nachrichtSenden(nachricht);
+                    if (benutzer != null) benutzer.clientCallback().nachrichtSenden(nachricht);
                 } catch (RemoteException e) {
                     serverKommunikation.benutzerAbmelden(s);
                 }

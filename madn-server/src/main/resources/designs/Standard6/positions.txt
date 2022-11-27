@@ -31,7 +31,7 @@
 // Left Up Finish 24
 98 163
 128 180
-158 193
+158 195
 188 210
 // Right Up Finish 28
 250 75
@@ -41,7 +41,7 @@
 // right middle finish 32
 402 163
 372 180
-342 193
+342 195
 312 210
 // Right Down Finish 36
 402 337

@@ -1,6 +1,5 @@
 package edu.unibw.sse.madn.app;
 
-import edu.unibw.sse.madn.ansicht.Ansicht;
 import edu.unibw.sse.madn.ansicht.Impl.AnsichtImpl;
 import edu.unibw.sse.madn.ansicht.Impl.DialogSpielstatistik;
 import edu.unibw.sse.madn.base.Spielstatistik;
@@ -13,7 +12,7 @@ import javafx.stage.Stage;
 
 public class TestStart extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         ClientKommunikation clientKommunikation = new ClientKommImpl();
         AnsichtImpl ansicht = new AnsichtImpl();
         DateizugriffClient dateizugriffClient = new DateizugriffClientImpl();
@@ -33,5 +32,6 @@ public class TestStart extends Application {
 
     public static void main(String[] args) {
         launch();
+        //System.out.println("  ".matches(" *"));
     }
 }

@@ -23,7 +23,7 @@ public class SpielMethoden {
             Arrays.fill(board, 0, 4, FELD_SPIELER1);
             Arrays.fill(board, 8, 12, FELD_SPIELER3);
             Arrays.fill(board, 16,20, FELD_SPIELER5);
-            if (spielerAnz == 5) {
+            if (spielerAnz >= 5) {
                 Arrays.fill(board, 4,8, FELD_SPIELER2);
                 Arrays.fill(board, 12,16, FELD_SPIELER4);
             }
@@ -115,12 +115,7 @@ public class SpielMethoden {
         if (from >= 48 && to >= 48 && b && board[to] != player) {
             // nicht über Start beachten
             int i = from - 48;
-            if (player == FELD_SPIELER1 && !((i + dice) >= 48)) return true;
-            if (player == FELD_SPIELER2 && !((i + dice) >= 8 && i < 8)) return true;
-            if (player == FELD_SPIELER3 && !((i + dice) >= 16 && i < 16)) return true;
-            if (player == FELD_SPIELER4 && !((i + dice) >= 24 && i < 24)) return true;
-            if (player == FELD_SPIELER5 && !((i + dice) >= 32 && i < 32)) return true;
-            if (player == FELD_SPIELER6 && !((i + dice) >= 40 && i < 40)) return true;
+            if (!ueberStart(player, i, dice)) return true;
         }
         // raus rücken
         if (dice == 6) {
@@ -262,15 +257,11 @@ public class SpielMethoden {
             return new int[]{88, 88 + dice};
         // schlagen
         for (int i = 47; i >= 0; i--) {
-            if (board[i + 48] == player && board[(i + dice) % 48 + 48] != player && board[(i + dice) % 48 + 48] != FELD_LEER) {
+            int fieldTo = (i + dice) % 48 + 48;
+            if (board[i + 48] == player && board[fieldTo] != player && board[fieldTo] != FELD_LEER) {
                 // nicht über Start beachten
-                if (player == FELD_SPIELER1 && !((i + dice) >= 48)) continue;
-                if (player == FELD_SPIELER2 && !((i + dice) >= 8 && i < 8)) continue;
-                if (player == FELD_SPIELER3 && !((i + dice) >= 16 && i < 16)) continue;
-                if (player == FELD_SPIELER4 && !((i + dice) >= 24 && i < 24)) continue;
-                if (player == FELD_SPIELER5 && !((i + dice) >= 32 && i < 32)) continue;
-                if (player == FELD_SPIELER6 && !((i + dice) >= 40 && i < 40)) continue;
-                return new int[]{i + 32, (i + dice) % 40 + 32};
+                if (ueberStart(player, i ,dice)) continue;
+                return new int[]{i + 48, fieldTo};
             }
         }
         return null;
@@ -377,22 +368,22 @@ public class SpielMethoden {
         // in Zielfelder
         if (field == FELD_SPIELER1) for (int i = 95; i > 95 - wurf; i--)
             if (boardState[i] == FELD_SPIELER1 && i + wurf < 100)
-                if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 72, wurf)) return new int[]{i, i + wurf - 72};
+                if (checkMoveValidInternSechser(boardState, field, i, i + wurf - 72, wurf)) return new int[]{i, i + wurf - 72};
         if (field == FELD_SPIELER2) for (int i = 55; i > 55 - wurf; i--)
             if (boardState[i] == FELD_SPIELER2 && i + wurf < 60)
-                if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 28, wurf)) return new int[]{i, i + wurf - 28};
+                if (checkMoveValidInternSechser(boardState, field, i, i + wurf - 28, wurf)) return new int[]{i, i + wurf - 28};
         if (field == FELD_SPIELER3) for (int i = 63; i > 63 - wurf; i--)
             if (boardState[i] == FELD_SPIELER3 && i + wurf < 68)
-                if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 32, wurf)) return new int[]{i, i + wurf - 32};
+                if (checkMoveValidInternSechser(boardState, field, i, i + wurf - 32, wurf)) return new int[]{i, i + wurf - 32};
         if (field == FELD_SPIELER4) for (int i = 71; i > 71 - wurf; i--)
             if (boardState[i] == FELD_SPIELER4 && i + wurf < 76)
-                if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 36, wurf)) return new int[]{i, i + wurf - 36};
+                if (checkMoveValidInternSechser(boardState, field, i, i + wurf - 36, wurf)) return new int[]{i, i + wurf - 36};
         if (field == FELD_SPIELER5) for (int i = 79; i > 79 - wurf; i--)
             if (boardState[i] == FELD_SPIELER5 && i + wurf < 84)
-                if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 40, wurf)) return new int[]{i, i + wurf - 40};
+                if (checkMoveValidInternSechser(boardState, field, i, i + wurf - 40, wurf)) return new int[]{i, i + wurf - 40};
         if (field == FELD_SPIELER6) for (int i = 87; i > 87 - wurf; i--)
             if (boardState[i] == FELD_SPIELER6 && i + wurf < 92)
-                if (checkMoveValidInternVierer(boardState, field, i, i + wurf - 44, wurf)) return new int[]{i, i + wurf - 44};
+                if (checkMoveValidInternSechser(boardState, field, i, i + wurf - 44, wurf)) return new int[]{i, i + wurf - 44};
         // sonst zufällig
         int[] start = new int[4];
         int count = 0;
@@ -407,5 +398,16 @@ public class SpielMethoden {
         }
 
         return new int[]{-1, -1};
+    }
+
+    @SuppressWarnings("RedundantIfStatement")
+    static boolean ueberStart(FeldBesetztStatus spieler, int i, int dice) {
+        if (spieler == FELD_SPIELER1 && (i + dice) >= 48) return true;
+        if (spieler == FELD_SPIELER2 && (i + dice) >= 8 && i < 8) return true;
+        if (spieler == FELD_SPIELER3 && (i + dice) >= 16 && i < 16) return true;
+        if (spieler == FELD_SPIELER4 && (i + dice) >= 24 && i < 24) return true;
+        if (spieler == FELD_SPIELER5 && (i + dice) >= 32 && i < 32) return true;
+        if (spieler == FELD_SPIELER6 && (i + dice) >= 40 && i < 40) return true;
+        return false;
     }
 }

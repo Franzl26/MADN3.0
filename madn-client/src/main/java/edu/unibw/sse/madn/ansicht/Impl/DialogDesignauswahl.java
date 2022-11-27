@@ -41,13 +41,27 @@ public class DialogDesignauswahl extends AnchorPane {
                 return;
             }
             last = true;
-            SpielfeldKonfigurationIntern config = ansichtImpl.spielfeldKonfigurationLaden(boardChoice.getValue(), null);
-            FeldBesetztStatus[] state = new FeldBesetztStatus[72];
-            Arrays.fill(state, 0, 4, FeldBesetztStatus.FELD_SPIELER1);
-            Arrays.fill(state, 4, 8, FeldBesetztStatus.FELD_SPIELER2);
-            Arrays.fill(state, 8, 12, FeldBesetztStatus.FELD_SPIELER3);
-            Arrays.fill(state, 12, 16, FeldBesetztStatus.FELD_SPIELER4);
-            Arrays.fill(state, 16, 72, FeldBesetztStatus.FELD_LEER);
+            SpielfeldKonfigurationIntern config;
+            FeldBesetztStatus[] state;
+            if (ansichtImpl.sechser) {
+                config = ansichtImpl.spielfeldKonfigurationLaden(boardChoice.getValue(), null);
+                state = new FeldBesetztStatus[96];
+                Arrays.fill(state, 0, 4, FeldBesetztStatus.FELD_SPIELER1);
+                Arrays.fill(state, 4, 8, FeldBesetztStatus.FELD_SPIELER2);
+                Arrays.fill(state, 8, 12, FeldBesetztStatus.FELD_SPIELER3);
+                Arrays.fill(state, 12, 16, FeldBesetztStatus.FELD_SPIELER4);
+                Arrays.fill(state, 16, 20, FeldBesetztStatus.FELD_SPIELER5);
+                Arrays.fill(state, 20, 24, FeldBesetztStatus.FELD_SPIELER6);
+                Arrays.fill(state, 24, 96, FeldBesetztStatus.FELD_LEER);
+            } else {
+                config = ansichtImpl.spielfeldKonfigurationLaden(boardChoice.getValue(), null);
+                state = new FeldBesetztStatus[72];
+                Arrays.fill(state, 0, 4, FeldBesetztStatus.FELD_SPIELER1);
+                Arrays.fill(state, 4, 8, FeldBesetztStatus.FELD_SPIELER2);
+                Arrays.fill(state, 8, 12, FeldBesetztStatus.FELD_SPIELER3);
+                Arrays.fill(state, 12, 16, FeldBesetztStatus.FELD_SPIELER4);
+                Arrays.fill(state, 16, 72, FeldBesetztStatus.FELD_LEER);
+            }
             BrettZeichnen.drawBoardAll(gcBoard, config, state);
             gcDice.setFill(Color.LIGHTSLATEGRAY);
             gcDice.fillRect(0, 0, 100, 100);

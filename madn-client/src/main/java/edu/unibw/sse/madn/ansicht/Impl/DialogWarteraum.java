@@ -108,7 +108,7 @@ public class DialogWarteraum extends AnchorPane {
     }
 
     void drawNames(String[] names) {
-        gcName.clearRect(0, 0, 200, 150);
+        gcName.clearRect(0, 0, 200, 210);
         gcName.setLineWidth(1.0);
         gcName.setFont(Font.font(20));
         gcName.setFill(Color.BLACK);
