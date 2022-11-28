@@ -1,5 +1,5 @@
 module madn.common {
-    requires java.rmi;
+    requires transitive java.rmi;
 
     exports edu.unibw.sse.madn.base;
     exports edu.unibw.sse.madn.komm;

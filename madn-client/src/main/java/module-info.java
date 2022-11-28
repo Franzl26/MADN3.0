@@ -2,7 +2,6 @@ module madn.client {
     requires transitive madn.common;
     requires javafx.media;
     requires javafx.controls;
-    requires java.rmi;
 
     opens edu.unibw.sse.madn.ansicht;
 

@@ -137,9 +137,10 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         config = ansichtImpl.spielfeldKonfigurationLaden(null, null);
     }
 
-    private int[] felderVonSpieler;
+    private int[] felderVonSpieler = new int[]{-1, -1, -1, -1, -1, -1};
 
     private void drawNamesIntern(String[] players, int turn) {
+        System.out.println(Arrays.toString(players));
         if (players == null) return;
         gcName.setFill(Color.LIGHTSLATEGRAY);
         gcName.fillRect(0, 0, 980, 50);
@@ -147,7 +148,7 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
         gcName.setFill(Color.BLACK);
         for (int i = 0; i < players.length; i++) {
             int baseX = 5 + 165 * i;
-            gcName.drawImage(config.figure[felderVonSpieler[i]], baseX, 15, 30, 30);
+            if (felderVonSpieler[i] != -1) gcName.drawImage(config.figure[felderVonSpieler[i]], baseX, 15, 30, 30);
             String p = players[i];
             gcName.fillText(p, baseX + 35, 40, 125);
             if (i == turn) gcName.fillRect(baseX, 46, 160, 47);

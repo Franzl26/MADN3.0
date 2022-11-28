@@ -11,7 +11,6 @@ import java.util.TimerTask;
 
 import static edu.unibw.sse.madn.base.FeldBesetztStatus.*;
 import static edu.unibw.sse.madn.spielLogik.Impl.SpielMethoden.*;
-import static java.lang.Thread.currentThread;
 import static java.lang.Thread.sleep;
 
 public class SpielObjekt {
@@ -118,7 +117,7 @@ public class SpielObjekt {
         if (aktiverSpieler < 0) return ZiehenRueckgabe.NICHT_DRAN;
         timerZiehen.cancel();
         timerWaiting.cancel();
-        System.out.println(currentThread().getName() + " does Submit " + namen[aktiverSpieler] + ": " + from + " -> " + to);
+        //System.out.println(currentThread().getName() + " does Submit " + namen[aktiverSpieler] + ": " + from + " -> " + to);
         int[] changed = new int[]{from, to, -1, -1, -1}; // from, to, strafe in loch, jmd geschlagen, strafe Figur die weg
         // wenn geschlagen zurücksetzen
         FeldBesetztStatus fieldStateFrom = boardState[from];
@@ -318,7 +317,7 @@ public class SpielObjekt {
         zahlGewuerfelt = (int) (Math.random() * 6 + 1);
 
         spielStatistik.incZahlGewuerfelt(aktiverSpieler, zahlGewuerfelt - 1);
-        System.out.println("throw diceIntern: " + namen[aktiverSpieler] + " : " + zahlGewuerfelt);
+        //System.out.println("throw diceIntern: " + namen[aktiverSpieler] + " : " + zahlGewuerfelt);
         anzahlWuerfeln--;
         displayDice(zahlGewuerfelt);
         if (zahlGewuerfelt == 6) {

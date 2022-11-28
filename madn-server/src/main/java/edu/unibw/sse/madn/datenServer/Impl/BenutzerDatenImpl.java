@@ -2,13 +2,21 @@ package edu.unibw.sse.madn.datenServer.Impl;
 
 import edu.unibw.sse.madn.datenServer.Benutzer;
 import edu.unibw.sse.madn.datenServer.BenutzerDaten;
-import edu.unibw.sse.madn.datenServer.DateizugriffServer;
 
 import java.io.*;
 import java.util.LinkedList;
 
 public class BenutzerDatenImpl implements BenutzerDaten {
     private final static String ordner = "./madn-server/src/main/resources/Benutzer/";
+
+    public BenutzerDatenImpl() {
+        File f = new File(ordner);
+        if (f.mkdir()) {
+            System.out.println("BenutzerOrdner erstellt");
+        } else {
+            System.out.println("BenutzerOrdner schon vorhanden");
+        }
+    }
 
     @Override
     public void benutzerSpeichern(Benutzer benutzer) {
@@ -35,7 +43,7 @@ public class BenutzerDatenImpl implements BenutzerDaten {
         File file = new File(ordner);
         if (!file.isDirectory()) {
             System.err.println("Falscher Ordner angegeben");
-            return null;
+            return benutzer.toArray(new Benutzer[0]);
         }
         File[] benutzerFile = file.listFiles();
         if (benutzerFile == null) return null;
