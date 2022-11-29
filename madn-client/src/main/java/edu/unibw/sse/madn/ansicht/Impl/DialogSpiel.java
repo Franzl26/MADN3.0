@@ -140,7 +140,6 @@ public class DialogSpiel extends AnchorPane implements SpielUpdaten {
     private int[] felderVonSpieler = new int[]{-1, -1, -1, -1, -1, -1};
 
     private void drawNamesIntern(String[] players, int turn) {
-        System.out.println(Arrays.toString(players));
         if (players == null) return;
         gcName.setFill(Color.LIGHTSLATEGRAY);
         gcName.fillRect(0, 0, 980, 50);
