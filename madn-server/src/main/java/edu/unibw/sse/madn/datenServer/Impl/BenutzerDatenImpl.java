@@ -12,6 +12,9 @@ public class BenutzerDatenImpl implements BenutzerDaten {
 
     @Override
     public void benutzerSpeichern(Benutzer benutzer) {
+        File benutzerFile = new File(ordner);
+        //noinspection ResultOfMethodCallIgnored
+        benutzerFile.mkdirs();
         try (ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(ordner + benutzer.benutzername()))) {
             os.writeObject(benutzer);
         } catch (IOException e) {
