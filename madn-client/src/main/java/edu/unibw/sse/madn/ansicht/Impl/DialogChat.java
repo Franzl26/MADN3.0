@@ -70,7 +70,7 @@ public class DialogChat extends AnchorPane {
         }
     }
 
-    void nachrichtHinzufuegen(String nachricht) {
+    public void nachrichtHinzufuegen(String nachricht) {
         verlauf.appendText(nachricht + "\n");
     }
 
@@ -91,7 +91,7 @@ public class DialogChat extends AnchorPane {
         return root;
     }
 
-    void anzeigen() {
+    public void anzeigen() {
         ((Stage) getScene().getWindow()).show();
     }
 
