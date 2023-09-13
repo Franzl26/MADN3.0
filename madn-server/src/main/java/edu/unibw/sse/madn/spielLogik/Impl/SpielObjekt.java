@@ -14,12 +14,19 @@ import static edu.unibw.sse.madn.spielLogik.Impl.SpielMethoden.*;
 import static java.lang.Thread.sleep;
 
 public class SpielObjekt {
+    //private static final int BOT_WAIT_WUERFELN = 100;
+    //private static final int BOT_WAIT_ZIEHEN = 500;
+    //private static final int DELAY_WUERFELN = 200;
+    //private static final int DELAY_SPIELZUG = 500;
+    //private static final int DELAY_WAITING = 10;
     private static final int BOT_WAIT_WUERFELN = 1000;
     private static final int BOT_WAIT_ZIEHEN = 2000;
     private static final int DELAY_WUERFELN = 10000;
     private static final int DELAY_SPIELZUG = 15000;
     private static final int DELAY_WAITING = 5000;
-    private static final int SLEEP_BETWEEN_MOVES = 1000;
+
+    private static final int SLEEP_BETWEEN_MOVES = 500;
+
     private final boolean timer = true;
 
     private final SpielstatistikIntern spielStatistik;

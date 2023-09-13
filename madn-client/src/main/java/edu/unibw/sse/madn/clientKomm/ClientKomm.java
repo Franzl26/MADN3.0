@@ -42,7 +42,7 @@ public interface ClientKomm {
     /**
      * @return Liste der Namen aller verfügbaren Designs/Spielfeld-Konfigurationen oder null bei Fehler
      */
-    String[] designListeHolen();
+    String[] designListeHolen(boolean sechser);
 
     /**
      * @param name Name des Designs

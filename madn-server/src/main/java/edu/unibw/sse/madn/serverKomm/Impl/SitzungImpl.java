@@ -41,8 +41,8 @@ public class SitzungImpl extends UnicastRemoteObject implements Sitzung {
     }
 
     @Override
-    public String[] designListeHolen() throws RemoteException {
-        return spielDesign.designListeHolen();
+    public String[] designListeHolen(boolean sechser) throws RemoteException {
+        return spielDesign.designListeHolen(sechser);
     }
 
     @Override

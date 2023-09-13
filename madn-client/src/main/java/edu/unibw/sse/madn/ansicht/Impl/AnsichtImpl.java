@@ -13,6 +13,7 @@ import javafx.scene.media.Media;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
@@ -167,7 +168,8 @@ public class AnsichtImpl implements Ansicht, RaumverwaltungUpdaten {
         if (dialogDesignauswahl == null) {
             dialogDesignauswahl = DialogDesignauswahl.dialogDesignauswahlStart(this);
         }
-        String[] designs = clientKomm.designListeHolen();
+        String[] designs = clientKomm.designListeHolen(sechser);
+        System.out.println(sechser + " designs: " + Arrays.toString(designs));
         //noinspection ReplaceNullCheck
         if (designs != null) {
             dialogDesignauswahl.designsAktualisieren(designs);

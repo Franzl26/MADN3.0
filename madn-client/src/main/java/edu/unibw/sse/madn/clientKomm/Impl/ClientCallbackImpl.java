@@ -49,13 +49,13 @@ public class ClientCallbackImpl extends UnicastRemoteObject implements ClientCal
     @Override
     public void wuerfelnVorbei() throws RemoteException {
         if (spiel == null) return;
-        spiel.wuerfelnVorbei();
+        //spiel.wuerfelnVorbei();
     }
 
     @Override
     public void ziehenVorbei() throws RemoteException {
         if (spiel == null) return;
-        spiel.ziehenVorbei();
+        //spiel.ziehenVorbei();
     }
 
     @Override

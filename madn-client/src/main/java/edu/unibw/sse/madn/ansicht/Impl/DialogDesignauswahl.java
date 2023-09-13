@@ -123,6 +123,7 @@ public class DialogDesignauswahl extends AnchorPane {
     }
 
     void anzeigen() {
+        boardChoice.hide();
         ((Stage) getScene().getWindow()).show();
     }
 }

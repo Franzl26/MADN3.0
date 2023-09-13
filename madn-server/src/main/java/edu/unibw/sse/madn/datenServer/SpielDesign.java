@@ -11,7 +11,7 @@ public interface SpielDesign {
      * 
      * @return List aller verfügbaren Designs/Spielfeld-Konfigurationen
      */
-    String[] designListeHolen();
+    String[] designListeHolen(boolean sechser);
 
     /**
      * Gibt die Konfiguration, welche zu dem ausgewählten Namen gehört, zurück

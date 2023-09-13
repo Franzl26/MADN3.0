@@ -24,7 +24,7 @@ public interface Sitzung extends Remote {
     /**
      * @return List aller verfügbaren Designs/Spielfeld-Konfigurationen
      */
-    String[] designListeHolen() throws RemoteException;
+    String[] designListeHolen(boolean sechser) throws RemoteException;
 
     /**
      * @param name Name des Designs

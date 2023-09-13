@@ -81,9 +81,9 @@ public class ClientKommImpl implements ClientKomm, ClientKommunikation {
     }
 
     @Override
-    public String[] designListeHolen() {
+    public String[] designListeHolen(boolean sechser) {
         try {
-            return sitzung.designListeHolen();
+            return sitzung.designListeHolen(sechser);
         } catch (RemoteException e) {
             return null;
         }
